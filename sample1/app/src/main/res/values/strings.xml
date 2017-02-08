@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">sample1</string>
+    <string name="app_username">Enter Name</string>
+    <string name="app_password">Enter password</string>
+    <string name="app_confirmpassword">Enter confirm password</string>
+
+</resources>
