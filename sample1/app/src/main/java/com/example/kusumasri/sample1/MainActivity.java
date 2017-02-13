@@ -27,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
         Name  = (EditText)findViewById(R.id.etName);
         pass    =(EditText)findViewById(R.id.etPass);
         conpass =(EditText)findViewById(R.id.etCnfPass);
-
+        Intent intent=new Intent(this,Weather2.class);
+        startService(intent);
         try {
          //    file = new File(context.getFilesDir(), filename);
         }
