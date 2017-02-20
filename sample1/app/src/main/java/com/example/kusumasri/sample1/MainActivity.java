@@ -8,17 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
-
-import java.io.File;
-import java.io.Serializable;
+import java.security.NoSuchAlgorithmException;
 
 public class MainActivity extends AppCompatActivity {
 
     EditText Name,pass,conpass;
     public Context context;
-    String filename="test.txt";
-    File file;
+    DataStorage dbhandler=new DataStorage(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,27 +25,43 @@ public class MainActivity extends AppCompatActivity {
         conpass =(EditText)findViewById(R.id.etCnfPass);
         Intent intent=new Intent(this,Weather2.class);
         startService(intent);
+        String password = "123";
+        String name = "kusuma";
+        String hashpass;
+        byte[] salt = {};
         try {
-         //    file = new File(context.getFilesDir(), filename);
-        }
-        catch (Exception e)
-        {
+            salt = Utils.getSalt();
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
+        hashpass = Utils.Convertpasstohash(password, salt);
+//        boolean res=dbhandler.getpass(name, hashpass);
     }
+
     //onClick function here
     public void onclicksignup(View view)
     {
+        //converting password to hash snd storing into DB
+        //Starting another activity to get weather information.
         Intent intent = new Intent (getApplicationContext(),Signup.class);
         intent.putExtra("name",Name.getText().toString());
         intent.putExtra("pass",pass.getText().toString());
-        intent.putExtra("Filename",filename);
         String password=pass.getText().toString();
         String confpass=conpass.getText().toString();
         if(password.equals(confpass))
         {
+            String hashpass=" ";
+            byte[] salt={};
             try {
-                startActivity(intent);
+                salt = Utils.getSalt();
+            } catch (NoSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
+            hashpass=Utils.Convertpasstohash(password ,salt);
+            user newuser=new user(Name.getText().toString(),hashpass);
+            dbhandler.addrow(newuser);
+            try {
+                 startActivity(intent);
             }catch(Exception e)
             {
                 e.printStackTrace();
@@ -57,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
         }
         else
         {
-            //error handling
+           //error handling of wrong name and wrong password in signup page
             AlertDialog.Builder dlgAlert = new AlertDialog.Builder(
                     this);
 
@@ -68,8 +80,7 @@ public class MainActivity extends AppCompatActivity {
             dlgAlert.show();
             //RelativeLayout layout = (RelativeLayout) findViewById(R.id.activity_main) ;
             //layout.addView(  );
-
-            dlgAlert.setPositiveButton("Ok",
+             dlgAlert.setPositiveButton("Ok",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog,
                                             int which) {
@@ -78,11 +89,24 @@ public class MainActivity extends AppCompatActivity {
                     });
         }
     }
-    public void onclicksignin()
+
+    public void onclicksignin(View view)
     {
-
-
-
+        Intent intent = new Intent (getApplicationContext(),SignIn.class);
+        try{
+                startActivity(intent);
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
     }
+    public void exitApp(View view)
+    {
+        moveTaskToBack(true);
+        finish();
+    }
+
+
 
 }

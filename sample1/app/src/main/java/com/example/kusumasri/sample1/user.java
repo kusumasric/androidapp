@@ -9,7 +9,7 @@ public class user {
     String uname;
     String pass;
 
-    public user(String uname,String pass,String emailid)
+    public user(String uname,String pass)
     {
         this.uname=uname;
         this.pass=pass;

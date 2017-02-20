@@ -9,8 +9,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
-import java.io.FileOutputStream;
 import com.example.kusumasri.sample1.Weather2.Mybinder;
 
 /**
@@ -19,7 +19,7 @@ import com.example.kusumasri.sample1.Weather2.Mybinder;
 
 public class Signup extends AppCompatActivity {
 
-    public static int count = 0;
+
     public String name = "", pass = "";
     public Location location=new Location(" ");
     public TextView tvWeatherResult;
@@ -31,29 +31,21 @@ public class Signup extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
-        count++;
-       // String filen = extras.getString("Filename");
-      //  FileOutputStream outputStream;
-
         if (extras != null) {
             name = extras.getString("name");
             pass = extras.getString("pass");
         }
-        String str = count + " " + name + " " + pass;
-       /* try {
-            outputStream = openFileOutput(filen, Context.MODE_PRIVATE);
-            outputStream.write(str.getBytes());
-            outputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }*/
+
         String hello = "hello" + name;
         TextView text = (TextView) findViewById(R.id.hellou);
         text.setText(hello);
         Intent i=new Intent(this,Weather2.class);
         bindService(i,connectionobj,Context.BIND_AUTO_CREATE);
-
-
+    }
+    public void gettemperature(View view)
+    {
+        tvWeatherResult=(TextView)findViewById(R.id.tvweather);
+        tvWeatherResult.setText(weatherobj1.weatherReport);
     }
 
     private ServiceConnection connectionobj=new ServiceConnection() {
@@ -61,13 +53,12 @@ public class Signup extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             Mybinder bind=(Mybinder)service;
             weatherobj1=bind.getData();
-            tvWeatherResult=(TextView)findViewById(R.id.tvweather);
-            tvWeatherResult.setText(weatherobj1.weatherReport);
             isbind=true;
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
+
             isbind=false;
         }
     };

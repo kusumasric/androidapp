@@ -109,7 +109,7 @@
         android:onClick="onclicksignup"/>
 
     <Button
-        android:text="cancel"
+        android:text="close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/cancel"
@@ -118,7 +118,8 @@
         android:layout_toRightOf="@+id/signin"
         android:layout_toEndOf="@+id/signin"
         android:layout_marginLeft="20dp"
-        android:layout_marginStart="20dp" />
+        android:layout_marginStart="20dp"
+        android:onClick="exitApp"/>
 
     <Button
         android:text="Sign IN"
