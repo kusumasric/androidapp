@@ -25,17 +25,7 @@ public class MainActivity extends AppCompatActivity {
         conpass =(EditText)findViewById(R.id.etCnfPass);
         Intent intent=new Intent(this,Weather2.class);
         startService(intent);
-        String password = "123";
-        String name = "kusuma";
-        String hashpass;
-        byte[] salt = {};
-        try {
-            salt = Utils.getSalt();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        hashpass = Utils.Convertpasstohash(password, salt);
-//        boolean res=dbhandler.getpass(name, hashpass);
+
     }
 
     //onClick function here
@@ -51,14 +41,9 @@ public class MainActivity extends AppCompatActivity {
         if(password.equals(confpass))
         {
             String hashpass=" ";
-            byte[] salt={};
-            try {
-                salt = Utils.getSalt();
-            } catch (NoSuchAlgorithmException e) {
-                e.printStackTrace();
-            }
-            hashpass=Utils.Convertpasstohash(password ,salt);
-            user newuser=new user(Name.getText().toString(),hashpass);
+
+            hashpass=Utils.Convertpasstohash(password);
+            user newuser=new user(Name.getText().toString(),hashpass.toString());
             dbhandler.addrow(newuser);
             try {
                  startActivity(intent);

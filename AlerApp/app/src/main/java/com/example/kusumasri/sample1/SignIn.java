@@ -31,16 +31,16 @@ public class SignIn extends Activity {
     public void signinvalidation(View view) {
         String password = pass.getText().toString();
         String name = Name.getText().toString();
-        String hashpass;
-        byte[] salt = {};
+      /*  String hashpass;
+         byte[] salt = {};
         try {
             salt = Utils.getSalt();
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
-        hashpass = Utils.Convertpasstohash(password, salt);
+        hashpass = Utils.Convertpasstohash(password, salt);*/
         DataStorage data =new DataStorage(this);
-        boolean res=data.getpass(name, hashpass);
+        boolean res=data.getpass(name,password);
         if(res) {
             Intent intent = new Intent(getApplicationContext(), Signup.class);
             intent.putExtra("name", Name.getText().toString());

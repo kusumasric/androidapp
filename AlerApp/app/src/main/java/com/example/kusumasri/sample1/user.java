@@ -9,6 +9,7 @@ public class user {
     String uname;
     String pass;
 
+
     public user(String uname,String pass)
     {
         this.uname=uname;
@@ -40,6 +41,5 @@ public class user {
     {
         return pass;
     }
-
 
 }

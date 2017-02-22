@@ -10,8 +10,20 @@ import java.security.SecureRandom;
 
 public class Utils
 {
+    public static byte[] salt=hexStringToByteArray("e04fd020ea3a6910a2d808002b30309d");
 
-    public static  String Convertpasstohash(String password,byte[] salt) {
+       public static byte[] hexStringToByteArray(String s) {
+            int len = s.length();
+            byte[] data = new byte[len / 2];
+            for (int i = 0; i < len; i += 2) {
+                data[i / 2] = (byte) ((Character.digit(s.charAt(i), 16) << 4)
+                        + Character.digit(s.charAt(i+1), 16));
+            }
+            return data;
+        }
+
+
+    public static  String Convertpasstohash(String password) {
 
         String generatedPassword = null;
         try {
@@ -29,13 +41,8 @@ public class Utils
         return generatedPassword;
     }
 
-    //Add salt
-    public static byte[] getSalt() throws NoSuchAlgorithmException {
-        SecureRandom sr = SecureRandom.getInstance("SHA1PRNG");
-        byte[] salt = new byte[16];
-        sr.nextBytes(salt);
-        return salt;
-    }
+
+
 
 
 }

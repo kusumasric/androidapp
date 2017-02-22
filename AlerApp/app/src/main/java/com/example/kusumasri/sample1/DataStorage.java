@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import java.lang.String;
+import com.example.kusumasri.sample1.Utils;
 /**
  * Created by kusumasri on 2/12/17.
  */
@@ -21,7 +22,7 @@ public class DataStorage extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String createQuery="create table authentication(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL,password TEXT );";
+        String createQuery="create table authentication(id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT NOT NULL unique, password TEXT );";
         db.execSQL(createQuery);
     }
 
@@ -46,15 +47,16 @@ public class DataStorage extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM authentication WHERE username =\""+usern+"\";");
 
     }
-    public boolean getpass(String uname,String hashpass)
+    public boolean getpass(String uname,String password)
     {
         SQLiteDatabase db=getWritableDatabase();
         Cursor c=db.rawQuery("SELECT password FROM authentication WHERE username=\""+uname+"\";",null);
         if (c != null ) {
             if  (c.moveToFirst()) {
                 do {
-                     String password= c.getString(c.getColumnIndex("password"));
-                       if(password==hashpass)
+                     String newpass=Utils.Convertpasstohash(password);
+                     String pass= c.getString(c.getColumnIndex("password"));
+                       if(newpass.equals(pass))
                            return true;
                 }while (c.moveToNext());
             }
