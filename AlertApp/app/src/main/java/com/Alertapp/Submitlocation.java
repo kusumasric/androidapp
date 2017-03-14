@@ -1,4 +1,4 @@
-package com.example.kusumasri.sample1;
+package com.Alertapp;
 
 import android.location.Location;
 import android.os.AsyncTask;

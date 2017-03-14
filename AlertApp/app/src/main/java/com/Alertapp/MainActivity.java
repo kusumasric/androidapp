@@ -1,4 +1,4 @@
-package com.example.kusumasri.sample1;
+package com.Alertapp;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -8,7 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import java.security.NoSuchAlgorithmException;
+
+import com.example.kusumasri.Alertapp.R;
 
 public class MainActivity extends AppCompatActivity {
 

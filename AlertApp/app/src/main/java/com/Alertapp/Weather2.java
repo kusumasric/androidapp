@@ -1,4 +1,4 @@
-package com.example.kusumasri.sample1;
+package com.Alertapp;
 
 import android.Manifest;
 import android.app.Service;

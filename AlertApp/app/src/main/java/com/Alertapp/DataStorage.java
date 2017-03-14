@@ -1,4 +1,4 @@
-package com.example.kusumasri.sample1;
+package com.Alertapp;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import java.lang.String;
-import com.example.kusumasri.sample1.Utils;
+
 /**
  * Created by kusumasri on 2/12/17.
  */

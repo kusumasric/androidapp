@@ -1,4 +1,4 @@
-package com.example.kusumasri.sample1;
+package com.Alertapp;
 
 /**
  * Created by kusumasri on 2/12/17.

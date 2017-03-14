@@ -1,16 +1,13 @@
-package com.example.kusumasri.sample1;
+package com.Alertapp;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
-import com.example.kusumasri.sample1.DataStorage;
+
+import com.example.kusumasri.Alertapp.R;
 
 import static android.app.AlertDialog.*;
 

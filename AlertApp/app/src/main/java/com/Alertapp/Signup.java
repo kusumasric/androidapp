@@ -1,4 +1,4 @@
-package com.example.kusumasri.sample1;
+package com.Alertapp;
 
 
 import android.content.ComponentName;
@@ -11,7 +11,8 @@ import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
-import com.example.kusumasri.sample1.Weather2.Mybinder;
+
+import com.example.kusumasri.Alertapp.R;
 
 /**
  * Created by kusumasri on 2/5/17.
@@ -51,7 +52,7 @@ public class Signup extends AppCompatActivity {
     private ServiceConnection connectionobj=new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            Mybinder bind=(Mybinder)service;
+            Weather2.Mybinder bind=(Weather2.Mybinder)service;
             weatherobj1=bind.getData();
             isbind=true;
         }
