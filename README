@@ -2,7 +2,7 @@
 The "Alert Application" provides user the ability to view the current temperature,set alerts depending upon weather,location,time.
 This application gathers location information using GPS sensor from a background service which runs continuously. Application interacts with Open weather API to get current weather information using that location information.
 
-In addition to that, I have implemented Sign in and Sign up pages for the users to log in and store their information in android SQLite database.
+Application also has Sign in and Sign up pages for the users to log in and store information in android SQLite database.
 
 Features Implemented:-
 ---------------------
