@@ -1,1 +1,20 @@
-This is an alerting application that alerts based on location,weather,time
+
+The "Alert Application" provides user the ability to view the current temperature,set alerts depending upon weather,location,time.
+This application gathers location information using GPS sensor from a background service which runs continuously. Application interacts with Open weather API to get current weather information using that location information.
+
+In addition to that, I have implemented Sign in and Sign up pages for the users to log in and store their information in android SQLite database.
+
+Features Implemented:-
+---------------------
+1)Signup/SignIn page
+2)User Authentication
+3)Getting location using GPS sensor
+4)Getting current temperature using Open Weather API using location
+
+Future Enhancements:-
+------------------------------
+1)UI to generate rules using time,location,weather.
+2)Ability to store user settings in cloud.
+3)Improve the way the App Authenticates.
+
+
