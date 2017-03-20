@@ -12,7 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.TextView;
 
-import com.example.kusumasri.Alertapp.R;
+import com.Alertapp.R;
 
 /**
  * Created by kusumasri on 2/5/17.

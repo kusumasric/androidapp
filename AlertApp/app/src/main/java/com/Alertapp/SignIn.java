@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.example.kusumasri.Alertapp.R;
+import com.Alertapp.R;
 
 import static android.app.AlertDialog.*;
 
