@@ -30,7 +30,7 @@ public class Weather extends AsyncTask<Location,Void,String > {
             CurrentWeather cwd = owm.currentWeatherByCoordinates((float) loc[0].getLatitude(), (float) loc[0].getLongitude());
             // checking if max. temp. and min. temp. is available
             if (cwd.getMainInstance().hasMaxTemperature() && cwd.getMainInstance().hasMinTemperature()) {
-                // printing the max./min. temperature
+
                 weatherReport = Float.toString(cwd.getMainInstance().getTemperature());
             }
         }
@@ -43,14 +43,5 @@ public class Weather extends AsyncTask<Location,Void,String > {
     protected void onPostExecute(String response) {
 
     }
-
-    protected void onProgressUpdate()
-    {
-
-    }
-
-
-
-
 
 }

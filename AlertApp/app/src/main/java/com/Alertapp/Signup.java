@@ -36,20 +36,55 @@ public class Signup extends AppCompatActivity {
             name = extras.getString("name");
             pass = extras.getString("pass");
         }
-
         String hello = "hello" + name;
         TextView text = (TextView) findViewById(R.id.hellou);
         text.setText(hello);
         Intent i=new Intent(this,Weather2.class);
         bindService(i,connectionobj,Context.BIND_AUTO_CREATE);
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
+
+
     public void gettemperature(View view)
     {
         tvWeatherResult=(TextView)findViewById(R.id.tvweather);
         tvWeatherResult.setText(weatherobj1.weatherReport);
     }
 
-    private ServiceConnection connectionobj=new ServiceConnection() {
+    private ServiceConnection connectionobj=new ServiceConnection()
+    {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             Weather2.Mybinder bind=(Weather2.Mybinder)service;

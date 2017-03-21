@@ -24,6 +24,37 @@ public class SignIn extends Activity {
         Name = (EditText) findViewById(R.id.Name);
         pass = (EditText) findViewById(R.id.password);
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+    }
 
     public void signinvalidation(View view) {
         String password = pass.getText().toString();
@@ -48,7 +79,8 @@ public class SignIn extends Activity {
                 e.printStackTrace();
             }
         }
-        else {
+        else
+        {
             //error handling of wrong name and wrong password in signup page
             Builder dlgAlert = new Builder(
                     this);

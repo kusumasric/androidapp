@@ -59,6 +59,7 @@ public class Weather2 extends Service implements LocationListener{
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
+
         return binderobj;
     }
 
