@@ -2,9 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@color/colorPrimaryDark"
     android:layout_height="match_parent"
     android:weightSum="1"
     android:baselineAligned="false">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign In"
+        android:gravity="center"
+        android:textSize="20dp"/>
 
     <TextView
         android:text="Name"
@@ -29,9 +36,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="123"
+        android:text=""
         android:ems="10"
         android:id="@+id/password"
+        android:background="@color/white"
         android:layout_alignBaseline="@+id/textView14"
         android:layout_alignBottom="@+id/textView14"
         android:layout_alignStart="@+id/Name" />
@@ -51,7 +59,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="kusuma"
+        android:text=""
+        android:background="@color/white"
         android:ems="10"
         android:id="@+id/Name"
         android:layout_alignBaseline="@+id/textView13"

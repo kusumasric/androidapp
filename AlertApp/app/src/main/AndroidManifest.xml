@@ -16,8 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.Alertapp.Signup"></activity>
+        <activity android:name="com.Alertapp.Home"></activity>
         <activity android:name="com.Alertapp.SignIn"></activity>
+        <activity android:name="com.Alertapp.Addrule"></activity>
         <service android:name="com.Alertapp.Weather2"/>
     </application>
 

@@ -9,8 +9,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-import com.Alertapp.R;
-
 public class MainActivity extends AppCompatActivity {
 
     EditText Name,pass,conpass;
@@ -67,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     {
         //converting password to hash snd storing into DB
         //Starting another activity to get weather information.
-        Intent intent = new Intent (getApplicationContext(),Signup.class);
+        Intent intent = new Intent (getApplicationContext(),Home.class);
         intent.putExtra("name",Name.getText().toString());
         intent.putExtra("pass",pass.getText().toString());
         String password=pass.getText().toString();

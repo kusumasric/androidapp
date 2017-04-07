@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:background="@color/colorAccent" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:weightSum="15"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Rule Name :"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tx_rulename"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:layout_below="@+id/textView5"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="25dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:text=""
+            android:ems="8"
+            android:background="@color/white"
+            android:id="@+id/et_rulename"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_alignBottom="@+id/et_output"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:weightSum="15"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="Rule Decription :"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView9"
+            android:textAlignment="center"
+            android:textColor="@color/white"
+            android:textSize="15dp"
+            android:layout_below="@+id/textView5"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginTop="25dp" />
+
+        <EditText
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:minHeight="100dp"
+            android:text=""
+            android:ems="8"
+            android:background="@color/white"
+            android:id="@+id/et_ruledesc"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_alignBottom="@+id/et_output"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginTop="5dp"
+        android:weightSum="15"
+        android:layout_height="wrap_content">
+
+    <Button
+        android:text="add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onclickadd"
+        android:id="@+id/Add" />
+
+    <Button
+        android:text="cancel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="onclickcancel"
+        android:id="@+id/cancel" />
+      </LinearLayout>
+
+
+</LinearLayout>

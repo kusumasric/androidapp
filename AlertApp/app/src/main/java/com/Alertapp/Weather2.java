@@ -70,7 +70,7 @@ public class Weather2 extends Service implements LocationListener{
                 subloc.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, loc);
             else
                 subloc.execute(loc);
-            weatherReport=subloc.get();
+                weatherReport=subloc.get();
         }
         catch(Exception ex)
         {

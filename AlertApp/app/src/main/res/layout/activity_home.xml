@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:weightSum="1"
+    android:baselineAligned="false"
+    android:orientation="vertical">
+
+    <TextView
+        android:text="Weather App  Home Page!"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:id="@+id/textView" />
+
+    <TextView
+        android:text="hellouser"
+        android:layout_width="251dp"
+        android:layout_height="20dp"
+        android:id="@+id/hellou" />
+
+    <TextView
+        android:text="Weather Report"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvweather" />
+
+    <Button
+        android:text="current weather"
+        android:layout_width="113dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/btnweather"
+        android:onClick="gettemperature"/>
+
+    <TextView
+        android:text="Notification Rules"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:layout_gravity="center"
+        android:id="@+id/textView7" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_weight="1"
+        android:elevation="10dp"
+        android:layout_height="0dp">
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:id="@+id/listview1"
+                android:layout_height="match_parent" >
+            </ListView>
+
+        </ScrollView>
+
+        <android.support.design.widget.FloatingActionButton
+            android:layout_height="50dp"
+            android:layout_width="50dp"
+            android:id="@+id/fabadd"
+            android:src="@drawable/fab_plus"
+            app:fabSize="normal"
+            app:elevation="12dp"
+            android:clickable="true"
+            app:pressedTranslationZ="12dp"
+            android:onClick="fabClick"
+            app:borderWidth="0dp"
+            android:layout_gravity="bottom|right|end"
+            android:layout_alignTop="@+id/fab"
+            android:layout_toEndOf="@+id/fab"
+            android:layout_toRightOf="@+id/fab" />
+
+    </FrameLayout>
+</LinearLayout>
+

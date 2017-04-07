@@ -10,7 +10,7 @@ import net.aksingh.owmjapis.OpenWeatherMap;
  * Created by kusumasri on 2/13/17.
  */
 
-public class Submitlocation extends AsyncTask<Location, Void, String> {
+public class Submitlocation extends AsyncTask<Location,Void, String> {
 
     public String weatherReport="";
     @Override
