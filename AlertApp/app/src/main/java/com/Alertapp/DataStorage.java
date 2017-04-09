@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class DataStorage extends SQLiteOpenHelper {
 
-    public  static final int dbversion=3;
+    public  static final int dbversion=4;
 
     public DataStorage(Context context)
     {

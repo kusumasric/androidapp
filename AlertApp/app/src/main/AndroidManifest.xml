@@ -20,6 +20,7 @@
         <activity android:name="com.Alertapp.SignIn"></activity>
         <activity android:name="com.Alertapp.Addrule"></activity>
         <service android:name="com.Alertapp.Weather2"/>
+        <service android:name=".GenerateNotification"/>
     </application>
 
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
