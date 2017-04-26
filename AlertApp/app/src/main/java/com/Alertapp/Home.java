@@ -32,6 +32,9 @@ public class Home extends AppCompatActivity {
     Weather2 weatherobj1=new Weather2();
     Boolean isbind=false;
     ListView Rulelist;
+    ArrayList<WeatherCondition> weatherist;
+    ArrayList<Locationcondition> locationlist;
+    ArrayList<Timecondition> timelist;
     ArrayList<Rule> arlist;
     public int count=0;
     public CustomAdapter adapter;
@@ -60,12 +63,13 @@ public class Home extends AppCompatActivity {
     public void addRulestoListview()
     {
         Rulelist=(ListView)findViewById(R.id.listview1);
-
         arlist=data.getrules();
+        weatherist=data.getweathercondition();
+        locationlist=data.getlocationcondition();
+
         if(arlist.size()>0) {
             adapter = new CustomAdapter(getApplicationContext(), arlist);
             Rulelist.setAdapter(adapter);
-
             Rulelist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
                 @Override

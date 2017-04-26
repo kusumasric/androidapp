@@ -23,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
         pass    =(EditText)findViewById(R.id.etPass);
         conpass =(EditText)findViewById(R.id.etCnfPass);
         Intent intent=new Intent(this,Weather2.class);
+        Intent i1=new Intent(this,GenerateNotification.class);
+        startService(i1);
         startService(intent);
     }
 

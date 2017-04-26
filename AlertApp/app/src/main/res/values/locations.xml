@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="Locationitems">
+        <item>Select a value</item>
+        <item>foster</item>
+        <item>SF</item>
+        <item>san mateo</item>
+    </string-array>
+</resources>

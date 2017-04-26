@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class DataStorage extends SQLiteOpenHelper {
 
-    public  static final int dbversion=3;
+    public  static final int dbversion=7;
 
     public DataStorage(Context context)
     {
@@ -27,12 +27,22 @@ public class DataStorage extends SQLiteOpenHelper {
         db.execSQL(createQuery);
         String createq1="create table rules(id INTEGER PRIMARY KEY AUTOINCREMENT, rulename TEXT NOT NULL, ruledes TEXT);";
         db.execSQL(createq1);
+        String createquerryweather="create table weathercondition(id INTEGER PRIMARY KEY AUTOINCREMENT, ruleid INTEGER NOT NULL, weather TEXT);";
+        db.execSQL(createquerryweather);
+        String createquerrylocation="create table locationcondition(id INTEGER PRIMARY KEY AUTOINCREMENT, ruleid INTEGER NOT NULL, location TEXT);";
+        db.execSQL(createquerrylocation);
+        String createquerrydate="create table datetimecondition(id INTEGER PRIMARY KEY AUTOINCREMENT, ruleid INTEGER NOT NULL, date TEXT,time TEXT);";
+        db.execSQL(createquerrydate);
+
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS authentication");
         db.execSQL("DROP TABLE IF EXISTS rules");
+        db.execSQL("DROP TABLE IF EXISTS weathercondition");
+        db.execSQL("DROP TABLE IF EXISTS locationcondition");
+        db.execSQL("DROP TABLE IF EXISTS datetimecondition");
         onCreate(db);
     }
 
@@ -55,6 +65,110 @@ public class DataStorage extends SQLiteOpenHelper {
         db.insert("authentication",null,val);
         db.close();
     }
+
+
+//To add weather condition
+    public void addweather(WeatherCondition wc,String rulename)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        String query="SELECT id FROM rules WHERE rulename =\""+rulename+"\";";
+        Cursor c;
+        int id=0;
+        c = db.rawQuery(query,null);
+        if(c!=null){
+            if  (c.moveToFirst()) {
+                do {
+                    id=c.getInt(c.getColumnIndex("id"));
+
+                }while (c.moveToNext());
+            }
+        }
+
+        wc.rule.id=id;
+        ContentValues val=new ContentValues();
+        val.put("ruleid",wc.rule.getid());
+        val.put("weather",wc.getWeather());
+        db.insert("weathercondition",null,val);
+        db.close();
+
+    }
+
+    //To add locationcondition
+    public void addlocation(Locationcondition lc,String rulename)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        String query="SELECT id FROM rules WHERE rulename =\""+rulename+"\";";
+        Cursor c;
+        int id=0;
+        c = db.rawQuery(query,null);
+        if(c!=null){
+            if  (c.moveToFirst()) {
+                do {
+                    id=c.getInt(c.getColumnIndex("id"));
+
+                }while (c.moveToNext());
+            }
+        }
+
+        lc.rule.id=id;
+        ContentValues val=new ContentValues();
+        val.put("ruleid",lc.rule.getid());
+        val.put("location",lc.getLocation());
+        db.insert("locationcondition",null,val);
+        db.close();
+
+    }
+
+
+    //To add datetime condition
+    public void adddatetime(Timecondition tc,String rulename)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        String query="SELECT id FROM rules WHERE rulename =\""+rulename+"\";";
+        Cursor c;
+        int id=0;
+        c = db.rawQuery(query,null);
+        if(c!=null){
+            if  (c.moveToFirst()) {
+                do {
+                    id=c.getInt(c.getColumnIndex("id"));
+
+                }while (c.moveToNext());
+            }
+        }
+
+        tc.rule.id=id;
+        ContentValues val=new ContentValues();
+        val.put("ruleid",tc.rule.getid());
+        val.put("date",tc.getDate());
+        val.put("time",tc.getTime());
+        db.insert("datetimecondition",null,val);
+        db.close();
+
+    }
+
+
+
+//To delete weather
+    public void deleteweather(int id)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        //String string =String.valueOf(id);
+        db.execSQL("DELETE FROM weathercondition WHERE  ruleid=\""+id+"\";");
+        deleterule(id);
+    }
+
+
+    //To delete location
+    public void deletelocation(int id)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        //String string =String.valueOf(id);
+        db.execSQL("DELETE FROM locationcondition WHERE  ruleid=\""+id+"\";");
+        deleterule(id);
+    }
+
+//To delete User
     public void deleteuser(String usern)
     {
         SQLiteDatabase db=getWritableDatabase();
@@ -77,6 +191,8 @@ public class DataStorage extends SQLiteOpenHelper {
         }
         return false;
     }
+
+    //To get all the rules
 
     public ArrayList<Rule> getrules()
     {
@@ -108,11 +224,110 @@ public class DataStorage extends SQLiteOpenHelper {
         return arrayrules;
     }
 
+
+    //To get all weather conditions
+    public ArrayList<WeatherCondition> getweathercondition()
+    {
+        ArrayList<WeatherCondition> arrayweather=new ArrayList<>();
+        SQLiteDatabase db=getWritableDatabase();
+        String selectQuery = "SELECT  * FROM  weathercondition;";
+        try {
+
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            try {
+
+                if (cursor.moveToFirst()) {
+                    do {
+                        WeatherCondition obj = new WeatherCondition();
+                        obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
+                        obj.setWeather(cursor.getString(cursor.getColumnIndex("weather")));
+                        obj.setruleid(cursor.getInt(cursor.getColumnIndex("ruleid")));
+                        arrayweather.add(obj);
+                    } while (cursor.moveToNext());
+                }
+            } finally {
+                try { cursor.close(); } catch (Exception ignore) {}
+            }
+
+        } finally {
+            try { db.close(); } catch (Exception ignore) {}
+        }
+
+        return arrayweather;
+    }
+
+
+
+    //To get all locationconditions
+    public ArrayList<Locationcondition> getlocationcondition()
+    {
+        ArrayList<Locationcondition> arraylocation=new ArrayList<>();
+        SQLiteDatabase db=getWritableDatabase();
+        String selectQuery = "SELECT  * FROM  locationcondition;";
+        try {
+
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            try {
+
+                if (cursor.moveToFirst()) {
+                    do {
+                        Locationcondition obj = new Locationcondition();
+                        obj.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                        obj.setLocation(cursor.getString(cursor.getColumnIndex("location")));
+                        obj.setruleid(cursor.getInt(cursor.getColumnIndex("ruleid")));
+                        arraylocation.add(obj);
+                    } while (cursor.moveToNext());
+                }
+            } finally {
+                try { cursor.close(); } catch (Exception ignore) {}
+            }
+
+        } finally {
+            try { db.close(); } catch (Exception ignore) {}
+        }
+
+        return arraylocation;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+//To delete rules
+
     public void deleterule(int id)
     {
         SQLiteDatabase db=getWritableDatabase();
         //String string =String.valueOf(id);
         db.execSQL("DELETE FROM rules WHERE  id=\""+id+"\";");
+        Cursor c=db.rawQuery("SELECT id FROM weathercondition WHERE ruleid=\""+id+"\";",null);
+        if (c != null ) {
+            if  (c.moveToFirst()) {
+                do {
+
+                    db.execSQL("DELETE FROM weathercondition WHERE ruleid=\""+id+"\";");
+
+                }while (c.moveToNext());
+            }
+        }
+        c=db.rawQuery("SELECT id FROM locationcondition WHERE ruleid=\""+id+"\";",null);
+        if (c != null ) {
+            if  (c.moveToFirst()) {
+                do {
+
+                    db.execSQL("DELETE FROM locationcondition WHERE ruleid=\""+id+"\";");
+
+                }while (c.moveToNext());
+            }
+        }
+
     }
 
 
