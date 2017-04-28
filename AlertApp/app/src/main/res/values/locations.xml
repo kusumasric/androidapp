@@ -2,7 +2,7 @@
 <resources>
     <string-array name="Locationitems">
         <item>Select a value</item>
-        <item>foster</item>
+        <item>Foster City</item>
         <item>SF</item>
         <item>san mateo</item>
     </string-array>

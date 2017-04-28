@@ -19,8 +19,14 @@
         <activity android:name="com.Alertapp.Home"></activity>
         <activity android:name="com.Alertapp.SignIn"></activity>
         <activity android:name="com.Alertapp.Addrule"></activity>
-        <service android:name="com.Alertapp.Weather2"/>
+
         <service android:name=".GenerateNotification"/>
+        <service android:name=".GenerateNotificationService"/>
+        <service android:name=".Locationservice"/>
+        <receiver
+            android:name=".MyAlarmReceiver"
+            android:process=":remote" >
+        </receiver>
     </application>
 
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />

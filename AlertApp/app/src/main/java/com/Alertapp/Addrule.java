@@ -98,7 +98,7 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
                     fromDatePickerDialog = new DatePickerDialog(viewtime.getContext(), new DatePickerDialog.OnDateSetListener() {
 
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                            str_date=dayOfMonth+"-"+monthOfYear+"-"+year;
+                            str_date=dayOfMonth+"-"+(monthOfYear+1)+"-"+year;
                             et_date.setText(str_date);
                             timec.setDate(str_date);
                         }

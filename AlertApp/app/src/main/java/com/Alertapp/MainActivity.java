@@ -22,10 +22,12 @@ public class MainActivity extends AppCompatActivity {
         Name  = (EditText)findViewById(R.id.etName);
         pass    =(EditText)findViewById(R.id.etPass);
         conpass =(EditText)findViewById(R.id.etCnfPass);
-        Intent intent=new Intent(this,Weather2.class);
-        Intent i1=new Intent(this,GenerateNotification.class);
-        startService(i1);
-        startService(intent);
+
+       // Intent i1=new Intent(this,GenerateNotification.class);
+       // startService(i1);
+        Intent location=new Intent(this,Locationservice.class);
+        startService(location);
+
     }
 
     @Override

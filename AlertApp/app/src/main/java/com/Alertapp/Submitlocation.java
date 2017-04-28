@@ -1,5 +1,6 @@
 package com.Alertapp;
 
+import android.content.Intent;
 import android.location.Location;
 import android.os.AsyncTask;
 
@@ -10,7 +11,7 @@ import net.aksingh.owmjapis.OpenWeatherMap;
  * Created by kusumasri on 2/13/17.
  */
 
-public class Submitlocation extends AsyncTask<Location,Void, String> {
+public class Submitlocation extends AsyncTask<Locationgps,Void, String> {
 
     public String weatherReport="";
     @Override
@@ -18,11 +19,11 @@ public class Submitlocation extends AsyncTask<Location,Void, String> {
         super.onPreExecute();
     }
     @Override
-    protected String doInBackground(Location...loc){
+    protected String doInBackground(Locationgps...loc){
 
         try {
             OpenWeatherMap owm = new OpenWeatherMap("c9191af0478be48aff2225833c22d6c7");
-            CurrentWeather cwd = owm.currentWeatherByCoordinates((float) loc[0].getLatitude(), (float) loc[0].getLongitude());
+            CurrentWeather cwd = owm.currentWeatherByCoordinates(loc[0].getLatitude(),loc[0].getLongitude());
             // checking if max. temp. and min. temp. is available
             if (cwd.getMainInstance().hasMaxTemperature() && cwd.getMainInstance().hasMinTemperature()) {
                 // printing the  temperature
@@ -32,6 +33,7 @@ public class Submitlocation extends AsyncTask<Location,Void, String> {
         catch(Exception ex) {
             ex.printStackTrace();
         }
+
         return weatherReport;
     }
     @Override

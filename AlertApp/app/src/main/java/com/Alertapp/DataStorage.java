@@ -292,6 +292,36 @@ public class DataStorage extends SQLiteOpenHelper {
 
 
 
+    //To get all datetimecondition
+    public ArrayList<Timecondition> gettimecondition()
+    {
+        ArrayList<Timecondition> arraytime=new ArrayList<>();
+        SQLiteDatabase db=getWritableDatabase();
+        String selectQuery = "SELECT  * FROM  datetimecondition;";
+        try {
+
+            Cursor cursor = db.rawQuery(selectQuery, null);
+            try {
+
+                if (cursor.moveToFirst()) {
+                    do {
+                        Timecondition obj = new Timecondition();
+                        obj.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                        obj.setTime(cursor.getString(cursor.getColumnIndex("time")));
+                        obj.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                        arraytime.add(obj);
+                    } while (cursor.moveToNext());
+                }
+            } finally {
+                try { cursor.close(); } catch (Exception ignore) {}
+            }
+
+        } finally {
+            try { db.close(); } catch (Exception ignore) {}
+        }
+
+        return arraytime;
+    }
 
 
 
