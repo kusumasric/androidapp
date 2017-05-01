@@ -8,15 +8,6 @@ public class Locationgps {
 
     float latitude;
     float longitude;
-    String city;
-
-    public String getcity() {
-        return city;
-    }
-
-    public void setLocation(String city) {
-        this.city=city;
-    }
 
     public Locationgps()
     {

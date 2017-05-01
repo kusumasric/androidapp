@@ -1,22 +1,11 @@
 package com.Alertapp;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.AsyncTask;
-import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v7.app.NotificationCompat;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
 
 
 /**
@@ -44,13 +33,12 @@ public class GenerateNotificationService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
 
-     //   registerReceiver(uiUpdated, new IntentFilter("LOCATION_UPDATED"));
+
+
 
 
         currentstate.currentlocation=intent.getStringExtra("location");
-        currentstate.currentdate=intent.getStringExtra("date");
-        currentstate.currenttime=intent.getStringExtra("time");
-        currentstate.currentweather = intent.getStringExtra("temperature");
+        currentstate.currentweather = intent.getFloatExtra("temperature",0);
         currentstate.context=getApplicationContext();
 
         NotificationsAsynctask notificationtask =new NotificationsAsynctask();

@@ -1,5 +1,7 @@
 package com.Alertapp;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,8 +13,14 @@ public class Timecondition extends Basecondition {
 
 
     String time,date;
-     int id;
+    int id;
+    int currenthr=0,hrs=0,currentmin=0,min=0 ;
+    Date date1=new Date();
+    Date currentdate=new Date();
+    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-hh:mm");
 
+
+    boolean result=false;
     public int getId() {
         return id;
     }
@@ -22,11 +30,36 @@ public class Timecondition extends Basecondition {
     }
 
     @Override
-    public boolean isConditionSatisfied(CurrentState cs) {
-      /*  if(calendar.getTime()==cs.cal.getTime() && calendar.get(Calendar.MONTH)==cs.cal.get(Calendar.MONTH) && calendar.get(Calendar.DAY_OF_MONTH)==cs.cal.get(Calendar.DAY_OF_MONTH) && calendar.get(Calendar.YEAR)==cs.cal.get(Calendar.YEAR) )
-            return true;
-        else*/
-            return false;
+    public boolean isConditionSatisfied(CurrentState cs)  {
+
+     /*  if(date.trim().equals(cs.getCurrentdate().trim()))
+       {
+           String[] timesplit=time.split(":");
+           String[] currenttime=cs.getCurrenttime().split(":");
+           hrs=Integer.parseInt(timesplit[0]);
+           min=Integer.parseInt(timesplit[1]);
+           currenthr=Integer.parseInt(currenttime[0]);
+           currentmin=Integer.parseInt(currenttime[1]);
+            if(hrs==currenthr && min==currentmin)
+                result=true;
+            else
+                result=false;
+       }*/
+        try {
+            date1=formatter.parse(date+"-"+time);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+            currentdate=cs.getDate();
+
+        long diff =Math.abs(date1.getTime()-(currentdate).getTime());
+        if(diff < 3 *60*1000)
+        {
+            result=true;
+        }
+
+       return result;
     }
 
     public String getTime() {
@@ -51,6 +84,10 @@ public class Timecondition extends Basecondition {
     public void Timecondition()
     {
 
+    }
+    public void setruleid(int ruleid)
+    {
+        rule.id=ruleid;
     }
 
 

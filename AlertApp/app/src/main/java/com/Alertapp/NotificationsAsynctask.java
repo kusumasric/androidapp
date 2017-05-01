@@ -2,14 +2,15 @@ package com.Alertapp;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.support.v7.app.NotificationCompat;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -18,14 +19,15 @@ import static android.content.Context.NOTIFICATION_SERVICE;
  * Created by kusumasri on 4/28/17.
  */
 
-public class NotificationsAsynctask extends AsyncTask< CurrentState,Void,Void> {
+public class NotificationsAsynctask extends AsyncTask<CurrentState,Void,Void> {
 
     ArrayList<Locationcondition> array_location=new ArrayList<>();
     ArrayList<WeatherCondition> array_weather=new ArrayList<>();
     ArrayList<Timecondition>  array_datetime=new ArrayList<>();
     DataStorage data;
 
-    DateandTime dt=new DateandTime();
+    Home home;
+    Date dt=new Date();
     String[] currenttime;
     String[] notificationtime;
 
@@ -58,33 +60,32 @@ public class NotificationsAsynctask extends AsyncTask< CurrentState,Void,Void> {
             notification.setSmallIcon(R.drawable.sjsulogo);
         }
 
-        dt.date=params[0].currentdate;
-        dt.time=params[0].currenttime;
+        dt=params[0].getDate();
+
         array_weather=data.getweathercondition();
         array_location=data.getlocationcondition();
         array_datetime=data.gettimecondition();
-        HashMap<Integer,DateandTime>  Track_rule=new HashMap<>();
+        Intent[] intents = new Intent[1];
+        intents[0] = new Intent(params[0].context,MainActivity.class);
+
+        Date dt1=new Date();
 
         for(int i=0;i<array_location.size();i++)
         {
             if(array_location.get(i).isConditionSatisfied(params[0]))
             {
-                if(Track_rule.containsKey(array_location.get(i).rule.getid()))
+                if(home.Track_rule.containsKey(array_location.get(i).rule.getid()))
                 {
-                    DateandTime dt1=new DateandTime();
-                    dt1=Track_rule.get(array_location.get(i));
-                    if(dt1.date.equals(dt.date))
+                    dt1=home.Track_rule.get(array_location.get(i));
+                    if(dt1.equals(dt))
                     {
-                        currenttime=dt.time.split(":");
-                        notificationtime=dt1.time.split(":");
-                        if(Integer.parseInt(currenttime[0])-Integer.parseInt(notificationtime[0])>3)
+
+                        if(dt1.getTime()-dt.getTime() > 30*60*1000 )
                         {
                             notification.setTicker(" kusuma");
                             notification.setWhen(System.currentTimeMillis());
                             notification.setContentTitle(array_location.get(i).rule.getRulename());
                             notification.setContentText(array_location.get(i).rule.getRuledesc());
-                            Intent[] intents = new Intent[1];
-
                             PendingIntent pintent = PendingIntent.getActivities(params[0].context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
                             notification.setContentIntent(pintent);
                             NotificationManager nm = (NotificationManager)params[0].context. getSystemService(NOTIFICATION_SERVICE);
@@ -92,8 +93,8 @@ public class NotificationsAsynctask extends AsyncTask< CurrentState,Void,Void> {
 
 
                         }
-                        dt1.time=dt.time;
-                        Track_rule.put(array_location.get(i).rule.getid(),dt1);
+                        dt1=dt;
+                        home.Track_rule.put(array_location.get(i).rule.getid(),dt1);
 
                     }
 
@@ -106,12 +107,109 @@ public class NotificationsAsynctask extends AsyncTask< CurrentState,Void,Void> {
                     notification.setWhen(System.currentTimeMillis());
                     notification.setContentTitle(array_location.get(i).rule.getRulename());
                     notification.setContentText(array_location.get(i).rule.getRuledesc());
-                    Intent[] intents = new Intent[1];
                     PendingIntent pintent = PendingIntent.getActivities(params[0].context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
                     notification.setContentIntent(pintent);
                     NotificationManager nm = (NotificationManager)params[0].context.getSystemService(NOTIFICATION_SERVICE);
                     nm.notify(num++, notification.build());
-                    Track_rule.put(array_location.get(i).rule.getid(),dt);
+                    home.Track_rule.put(array_location.get(i).rule.getid(),dt);
+                }
+
+            }
+
+        }
+
+        for(Timecondition timeCondition: array_datetime)
+        {
+            if(timeCondition.isConditionSatisfied(params[0]))
+            {
+                if(home.Track_rule.containsKey(timeCondition.rule.getid()))
+                {
+                    dt1=home.Track_rule.get(timeCondition);
+                    if(dt1.equals(dt))
+                    {
+
+                        if(dt.getTime()-dt1.getTime()> 30 *60*1000)
+                        {
+                            notification.setTicker(" kusuma");
+                            notification.setWhen(System.currentTimeMillis());
+                            notification.setContentTitle(timeCondition.rule.getRulename());
+                            notification.setContentText(timeCondition.rule.getRuledesc());
+                            PendingIntent pintent = PendingIntent.getActivities(params[0].context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
+                            notification.setContentIntent(pintent);
+                            NotificationManager nm = (NotificationManager)params[0].context. getSystemService(NOTIFICATION_SERVICE);
+                            nm.notify(num++, notification.build());
+
+
+                        }
+                        dt1=dt;
+                        home.Track_rule.put(timeCondition.rule.getid(),dt1);
+
+                    }
+
+                }
+
+                else
+                {
+
+                    notification.setTicker(" kusuma");
+                    notification.setWhen(System.currentTimeMillis());
+                    notification.setContentTitle(timeCondition.rule.getRulename());
+                    notification.setContentText(timeCondition.rule.getRuledesc());
+                    PendingIntent pintent = PendingIntent.getActivities(params[0].context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
+                    notification.setContentIntent(pintent);
+                    NotificationManager nm = (NotificationManager)params[0].context.getSystemService(NOTIFICATION_SERVICE);
+                    nm.notify(num++, notification.build());
+                    home.Track_rule.put(timeCondition.rule.getid(),dt);
+                }
+
+            }
+
+        }
+
+
+        //for weather conditions
+        for(WeatherCondition weatherCondition: array_weather)
+        {
+            if(weatherCondition.isConditionSatisfied(params[0]))
+            {
+                if(home.Track_rule.containsKey(weatherCondition.rule.getid()))
+                {
+                    dt1=home.Track_rule.get(weatherCondition);
+                    if(dt1.equals(dt))
+                    {
+
+                        if(dt.getTime()-dt1.getTime()> 30 *60*1000)
+                        {
+                            notification.setTicker(" kusuma");
+                            notification.setWhen(System.currentTimeMillis());
+                            notification.setContentTitle(weatherCondition.rule.getRulename());
+                            notification.setContentText(weatherCondition.rule.getRuledesc());
+                            PendingIntent pintent = PendingIntent.getActivities(params[0].context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
+                            notification.setContentIntent(pintent);
+                            NotificationManager nm = (NotificationManager)params[0].context. getSystemService(NOTIFICATION_SERVICE);
+                            nm.notify(num++, notification.build());
+
+
+                        }
+                        dt1=dt;
+                        home.Track_rule.put(weatherCondition.rule.getid(),dt1);
+
+                    }
+
+                }
+
+                else
+                {
+
+                    notification.setTicker(" kusuma");
+                    notification.setWhen(System.currentTimeMillis());
+                    notification.setContentTitle(weatherCondition.rule.getRulename());
+                    notification.setContentText(weatherCondition.rule.getRuledesc());
+                    PendingIntent pintent = PendingIntent.getActivities(params[0].context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
+                    notification.setContentIntent(pintent);
+                    NotificationManager nm = (NotificationManager)params[0].context.getSystemService(NOTIFICATION_SERVICE);
+                    nm.notify(num++, notification.build());
+                    home.Track_rule.put(weatherCondition.rule.getid(),dt);
                 }
 
             }
@@ -120,9 +218,21 @@ public class NotificationsAsynctask extends AsyncTask< CurrentState,Void,Void> {
 
 
 
-
-
-
         return null;
+
     }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+    }
+
+    @Override
+    protected void onProgressUpdate(Void... values) {
+
+
+        super.onProgressUpdate(values);
+    }
+
+
 }

@@ -16,8 +16,8 @@ import java.util.ArrayList;
 public class GenerateNotification extends IntentService {
 
     NotificationCompat.Builder notification;
-    private static int num = 1237;
-    ArrayList<Rule> rules = new ArrayList<>();
+    private static int num = 1;
+    ArrayList<Locationcondition> rules = new ArrayList<>();
     DataStorage data = new DataStorage(this);
 
     public GenerateNotification() {
@@ -29,7 +29,7 @@ public class GenerateNotification extends IntentService {
 
         notification = new NotificationCompat.Builder(this);
         notification.setAutoCancel(true);
-        rules = data.getrules();
+        rules = data.getlocationcondition();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int color = 0x008000;
             notification.setColor(color);
@@ -43,8 +43,8 @@ public class GenerateNotification extends IntentService {
         for (int i = 0; i < rules.size(); i++) {
             notification.setTicker(" kusuma");
             notification.setWhen(System.currentTimeMillis());
-            notification.setContentTitle(rules.get(i).getRulename());
-            notification.setContentText(rules.get(i).getRuledesc());
+            notification.setContentTitle(rules.get(i).getLocation());
+            notification.setContentText(rules.get(i).rule.getRuledesc());
             Intent[] intents = new Intent[1];
             intents[0] = new Intent(this, MainActivity.class);
             PendingIntent pintent = PendingIntent.getActivities(this, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);

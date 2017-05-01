@@ -1,5 +1,8 @@
 package com.Alertapp;
 
+import android.provider.Settings;
+import android.util.Log;
+
 /**
  * Created by kusumasri on 4/24/17.
  */
@@ -17,13 +20,15 @@ public class Locationcondition extends Basecondition {
         this.id = id;
     }
 
+
     @Override
     public boolean isConditionSatisfied(CurrentState cs) {
-
-        if(cs.currentlocation==location)
+        Log.d(cs.currentlocation.trim() + " " + location.trim(),cs.currentlocation.trim() + " " + location.trim());
+        boolean result = cs.currentlocation.trim().equalsIgnoreCase(location.trim());
+        return result;
+        /*if(cs.currentlocation.trim().equalsIgnoreCase(location.trim()) == true)
             return true;
-        else
-            return false;
+        return false;*/
     }
 
     public String getLocation() {

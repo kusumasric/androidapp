@@ -30,12 +30,8 @@ public class locationasynctask extends AsyncTask<Context,Locationgps,Locationgps
     public Locationgps loc_gps;
     public Context context;
     Submitlocation subloc=new Submitlocation();
-    public Double city_latitude,city_longitude;
-    public float ser_latitude,ser_longitude;
 
-    public Geocoder geocoder;
-    public List<Address> addresses;
-    String address="",city="";
+    public float ser_latitude,ser_longitude;
 
 
     @Override
@@ -47,25 +43,17 @@ public class locationasynctask extends AsyncTask<Context,Locationgps,Locationgps
 
     @Override
     protected Locationgps doInBackground(Context...cont) {
-        Looper.myLooper().prepare();
+        if (Looper.myLooper() == null)
+        {
+            Looper.prepare();
+        }
         context=cont[0];
 
         findlocation();
-        geocoder = new Geocoder(cont[0].getApplicationContext(), Locale.getDefault());
-
-        try {
-            addresses = geocoder.getFromLocation(city_latitude, city_longitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        address = addresses.get(0).getAddressLine(0);
-        city = addresses.get(0).getLocality();
         loc_gps= new Locationgps(ser_longitude,ser_latitude);
         Intent i = new Intent("LOCATION_UPDATED");
         i.putExtra("longitude",loc_gps.getLongitude());
         i.putExtra("latitude",loc_gps.getLatitude());
-        i.putExtra("city",city);
         context.sendBroadcast(i);
         return loc_gps;
     }
@@ -85,8 +73,8 @@ public class locationasynctask extends AsyncTask<Context,Locationgps,Locationgps
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 10, this);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 10, this);
             Location loc= locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            city_latitude=loc.getLatitude();
-            city_longitude=loc.getLongitude();
+
+
             ser_longitude=(float)loc.getLongitude();
             ser_latitude=(float)loc.getLatitude();
             loc_gps=new Locationgps(ser_longitude,ser_latitude);
@@ -98,11 +86,11 @@ public class locationasynctask extends AsyncTask<Context,Locationgps,Locationgps
     public void onLocationChanged(Location loc) {
 
         Intent broadcastintent=new Intent("com.example.location");
-        city_longitude=loc.getLongitude();
-        city_latitude=loc.getLatitude();
         ser_longitude=(float)loc.getLongitude();
         ser_latitude=(float)loc.getLatitude();
         loc_gps=new Locationgps(ser_longitude,ser_latitude);
+
+
         // Looper.myLooper().quit();
 
 
@@ -117,9 +105,10 @@ public class locationasynctask extends AsyncTask<Context,Locationgps,Locationgps
     @Override
     protected void onPostExecute(Locationgps locationgps) {
         //These 3 lines are to test continous values
-        String str="longitude"+locationgps.getLongitude()+" "+"latitude"+locationgps.getLatitude()+" "+"city"+city;
+        String str="longitude"+locationgps.getLongitude()+" "+"latitude"+locationgps.getLatitude();
         Toast toast = Toast.makeText(context,str,Toast.LENGTH_LONG);
         toast.show();
+
         super.onPostExecute(locationgps);
     }
 

@@ -21,25 +21,6 @@
         android:layout_height="20dp"
         android:id="@+id/hellou" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:orientation="horizontal"
-        android:layout_height="wrap_content">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:text="Current Temperature : "
-        android:padding="5dp"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:text="Weather Report"
-        android:layout_width="200dp"
-        android:padding="5dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/tvweather" />
-
-    </LinearLayout>
 
 
     <LinearLayout
@@ -49,16 +30,35 @@
 
         <TextView
             android:layout_width="wrap_content"
-            android:text="Current Location : "
+            android:text="Current Temperature : "
             android:padding="5dp"
             android:layout_height="wrap_content" />
 
         <TextView
-            android:text="location"
+            android:text="Weather Report"
             android:layout_width="200dp"
             android:padding="5dp"
             android:layout_height="wrap_content"
-            android:id="@+id/tvlocation" />
+            android:id="@+id/tvweather" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:text="Current City: "
+            android:padding="5dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:text="Weather Report"
+            android:layout_width="200dp"
+            android:padding="5dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvcity" />
 
     </LinearLayout>
 

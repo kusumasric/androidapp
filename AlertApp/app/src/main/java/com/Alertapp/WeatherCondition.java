@@ -7,26 +7,44 @@ package com.Alertapp;
 public class WeatherCondition  extends Basecondition{
 
 
-    String weather="";
+    int mintemp, maxtemp;
     int id;
     @Override
     public boolean isConditionSatisfied(CurrentState cs) {
-        if(weather==cs.currentweather)
-            return true;
-        else
-            return false;
+        float temp=cs.getCurrentweather();
+        int  minval=Float.compare(temp,mintemp);
+        int maxval=Float.compare(maxtemp,temp);
+        if(minval>0 && maxval >0)
+                return true;
+        return false;
     }
     public void WeatherCondition()
     {
 
     }
 
-    public String getWeather() {
-        return weather;
+    public int getMintemp() {
+        return mintemp;
     }
 
-    public void setWeather(String weather) {
-        this.weather = weather;
+    public void setMintemp(int mintemp) {
+        this.mintemp = mintemp;
+    }
+
+    public int getMaxtemp() {
+        return maxtemp;
+    }
+
+    public void setMaxtemp(int maxtemp) {
+        this.maxtemp = maxtemp;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public  void setid(int id)

@@ -9,11 +9,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -21,8 +24,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
 
 import com.Alertapp.Rule.*;
 import static android.R.id.list;
@@ -37,7 +45,7 @@ public class Home extends AppCompatActivity {
     public String name = "", pass = "";
     public Location location=new Location(" ");
     public TextView tvWeatherResult;
-
+    public static final HashMap<Integer,Date> Track_rule=new HashMap<>();
     Boolean isbind=false;
     ListView Rulelist;
     ArrayList<WeatherCondition> weatherist;
@@ -46,13 +54,14 @@ public class Home extends AppCompatActivity {
     ArrayList<Rule> arlist;
     public int count=0;
     public CustomAdapter adapter;
-    String temperature="";
+    String cityName="";
+    float temperature;
     DataStorage data =new DataStorage(this);
     Locationgps loc=new Locationgps();
-    TextView tv_weather,tv_location;
+    TextView tv_weather,tv_city;
     CurrentState cs=new CurrentState();
-    Calendar c = Calendar.getInstance();
-    String strtime,strdate;
+
+
     Intent notificationintent ;
 
     @Override
@@ -69,14 +78,11 @@ public class Home extends AppCompatActivity {
         TextView text = (TextView) findViewById(R.id.hellou);
         text.setText(hello);
         tv_weather=(TextView)findViewById(R.id.tvweather);
-        tv_location=(TextView)findViewById(R.id.tvlocation);
+        tv_city=(TextView)findViewById(R.id.tvcity);
 
         addRulestoListview();
         scheduleAlarm();
-        strtime=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
-        strdate=c.get(Calendar.DAY_OF_MONTH)+"-"+c.get(Calendar.MONTH)+"-"+c.get(Calendar.YEAR);
         registerReceiver(uiUpdated, new IntentFilter("LOCATION_UPDATED"));
-
     }
 
 
@@ -87,7 +93,20 @@ public class Home extends AppCompatActivity {
 
              loc.longitude=Float.parseFloat(""+intent.getExtras().getFloat("longitude"));
              loc.latitude =Float.parseFloat(""+intent.getExtras().getFloat("latitude"));
-             loc.city=""+intent.getExtras().get("city");
+             Geocoder gcd = new Geocoder(getBaseContext(),Locale.getDefault());
+             List<Address> addresses;
+            try {
+                addresses = gcd.getFromLocation(loc.getLatitude(),
+                        loc.getLongitude(), 1);
+                if (addresses.size() > 0) {
+                    System.out.println(addresses.get(0).getLocality());
+                    cityName = addresses.get(0).getLocality();
+                }
+            }
+            catch (IOException e) {
+                e.printStackTrace();
+            }
+
              Submitlocation subloc=new Submitlocation();
             try {
 
@@ -101,18 +120,17 @@ public class Home extends AppCompatActivity {
             {
                 ex.printStackTrace();
             }
-            tv_weather.setText(temperature);
-            tv_location.setText(loc.city);
-            cs.setCurrentlocation(loc.city);
+            tv_weather.setText(Float.toString(temperature));
+            tv_city.setText(cityName);
+
+            cs.setCurrentlocation(cityName);
             cs.setCurrentweather(temperature);
-            cs.setCurrentdate(strdate);
-            cs.setCurrenttime(strtime);
+
             notificationintent =new Intent(context,GenerateNotificationService.class);
-            notificationintent.putExtra("location",loc.city);
-            notificationintent.putExtra("date",strdate);
-            notificationintent.putExtra("time",strtime);
+            notificationintent.putExtra("location",cityName);
             notificationintent.putExtra("temperature",temperature);
             startService(notificationintent);
+
 
         }
     };
@@ -133,12 +151,6 @@ public class Home extends AppCompatActivity {
                 1*60*1000, pIntent);
 
     }
-
-
-
-
-
-
 
 
     public void addRulestoListview()
@@ -199,7 +211,9 @@ public class Home extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        unregisterReceiver(uiUpdated);
         super.onStop();
+
 
     }
 
@@ -208,7 +222,6 @@ public class Home extends AppCompatActivity {
         super.onDestroy();
 
     }
-
 
 
     public void fabClick(View view)

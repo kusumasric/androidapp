@@ -35,7 +35,7 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
     Locationcondition locationc=new Locationcondition();
     Timecondition  timec=new Timecondition();
     int year,month,day,hours,minutes;
-    EditText et_date,et_time;
+    EditText et_date,et_time,et_min,et_max;
     Calendar myCalendar;
     String str_date="",str_time="";
     static final int dialognum=0;
@@ -43,7 +43,7 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
     public TimePickerDialog timepicker;
 
     int selectedposition=0;
-    String weather="";
+    String mintemp,maxtemp;
     String location="";
 
     Context context;
@@ -52,10 +52,7 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
          setContentView(R.layout.addrule);
-       /*  Spinner spinner_menu=(Spinner)findViewById(R.id.spinner_menu);
-         ArrayAdapter<String> menuadapter= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.Menuitems));
-         menuadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-         spinner_menu.setAdapter(menuadapter);*/
+
          et_rulename=(EditText)findViewById(R.id.et_rulename);
          et_ruledesc=(EditText)findViewById(R.id.et_ruledesc);
 
@@ -150,7 +147,7 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                             if(position==1)
                             {
-                                location="foster";
+                                location="Foster City";
                             }
                             if(position==2)
                             {
@@ -158,7 +155,7 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
                             }
                             if(position==3)
                             {
-                                location="san mateo";
+                                location="San Mateo";
                             }
                         }
 
@@ -167,47 +164,20 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
 
                         }
                     });
-
-                    locationc.setLocation(location);
                     locationc.rule.id=0;
+
                 }
 
                 if(position==3)
                 {
                     selectedposition=3;
                     lLayout.removeAllViews();
-                    viewweather=inflater.inflate(R.layout.weathersubmenu,lLayout,false);
+                    viewweather=inflater.inflate(R.layout.weathersubmenu,null);
                     lLayout.addView(viewweather);
-                    Spinner spinner_weather=(Spinner)viewweather.findViewById(R.id.weatherspinner);
-                    weatheradapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                    spinner_weather.setAdapter(weatheradapter);
-                    spinner_weather.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+                    et_min=(EditText)viewweather.findViewById(R.id.et_mintemp);
+                    et_max=(EditText)viewweather.findViewById(R.id.et_maxtemp);
 
-                        @Override
-                        public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                            if(position==1)
-                            {
-                                weather="Humidity";
-                            }
-                            if(position==2)
-                            {
-                                weather="Rainy";
-                            }
-                            if(position==3)
-                            {
-                                weather="Sunny";
-                            }
-
-                        }
-
-                        @Override
-                        public void onNothingSelected(AdapterView<?> parent) {
-
-                        }
-                    });
-
-                    weatherc.setWeather(weather);
                     weatherc.rule.id=0;
 
                 }
@@ -235,18 +205,28 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
 
         if(selectedposition==1)
         {
+            timec.date=str_date;
+            timec.time=str_time;
             timec.rule=rulenew;
             dbhandler.adddatetime(timec,rulename);
         }
 
         if(selectedposition==2)
         {
+
+            locationc.setLocation(location);
             locationc.rule=rulenew;
             dbhandler.addlocation(locationc,rulename);
         }
 
         if(selectedposition==3)
         {
+            mintemp=et_min.getText().toString();
+            maxtemp=et_max.getText().toString();
+            int mintemp1=Integer.parseInt(mintemp);
+            int maxtemp1=Integer.parseInt(maxtemp);
+            weatherc.setMintemp(mintemp1);
+            weatherc.setMaxtemp(maxtemp1);
             weatherc.rule=rulenew;
             dbhandler.addweather(weatherc,rulename);
         }

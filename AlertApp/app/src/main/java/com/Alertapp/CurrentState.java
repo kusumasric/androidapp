@@ -2,7 +2,6 @@ package com.Alertapp;
 
 import android.content.Context;
 
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -11,17 +10,16 @@ import java.util.Date;
  */
 
 public class CurrentState {
-    String currentweather="";
+    float currentweather=0;
     String currentlocation="";
-    String currentdate="";
-    String currenttime="";
+    Date d=new Date();
     Context context;
 
-    public String getCurrentweather() {
+    public float getCurrentweather() {
         return currentweather;
     }
 
-    public void setCurrentweather(String currentweather) {
+    public void setCurrentweather(float currentweather) {
         this.currentweather = currentweather;
     }
 
@@ -32,28 +30,9 @@ public class CurrentState {
     public void setCurrentlocation(String currentlocation) {
         this.currentlocation = currentlocation;
     }
-
-    public String getCurrentdate() {
-
-        Calendar c = Calendar.getInstance();
-        String strdate=c.get(Calendar.DAY_OF_MONTH)+"-"+c.get(Calendar.MONTH)+"-"+c.get(Calendar.YEAR);
-        this.currentdate = strdate;
-        return currentdate;
+    public Date getDate()
+    {
+        return d;
     }
 
-    public void setCurrentdate(String currentdate) {
-
-    }
-
-    public String getCurrenttime() {
-        Calendar c = Calendar.getInstance();
-        String strtime=c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
-        this.currentdate = strtime ;
-        return currenttime;
-    }
-
-    public void setCurrenttime(String currenttime) {
-
-        this.currenttime = currenttime;
-    }
 }
