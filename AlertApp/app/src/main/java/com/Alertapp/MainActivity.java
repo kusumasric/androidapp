@@ -1,5 +1,7 @@
 package com.Alertapp;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     EditText Name,pass,conpass;
     public Context context;
     DataStorage dbhandler=new DataStorage(this);
+    Intent location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,11 +25,25 @@ public class MainActivity extends AppCompatActivity {
         Name  = (EditText)findViewById(R.id.etName);
         pass    =(EditText)findViewById(R.id.etPass);
         conpass =(EditText)findViewById(R.id.etCnfPass);
+        scheduleAlarm();
 
-        //Intent i1=new Intent(this,GenerateNotification.class);
-        //startService(i1);
-        Intent location=new Intent(this,Locationservice.class);
-        startService(location);
+      //  location=new Intent(this,Locationservice.class);
+       // startService(location);
+
+    }
+
+    public void scheduleAlarm() {
+
+        Intent intent = new Intent(getApplicationContext(), MyAlarmReceiver.class);
+
+        final PendingIntent pIntent = PendingIntent.getBroadcast(this, MyAlarmReceiver.REQUEST_CODE,
+                intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long firstMillis = System.currentTimeMillis(); // alarm is set right away
+        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+
+        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
+                1*60*1000, pIntent);
 
     }
 
@@ -54,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+
         super.onStop();
 
     }

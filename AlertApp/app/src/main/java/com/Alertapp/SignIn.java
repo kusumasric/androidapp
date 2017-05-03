@@ -21,6 +21,7 @@ public class SignIn extends Activity {
         setContentView(R.layout.activity_signin);
         Name = (EditText) findViewById(R.id.Name);
         pass = (EditText) findViewById(R.id.password);
+
     }
     @Override
     protected void onStart() {

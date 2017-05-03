@@ -155,7 +155,7 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
                             }
                             if(position==3)
                             {
-                                location="San Mateo";
+                                location="Santa Clara";
                             }
                         }
 
@@ -231,8 +231,8 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
             dbhandler.addweather(weatherc,rulename);
         }
 
-        finish();
-
+        super.onBackPressed();
+        //finish();
     }
 
     @Override

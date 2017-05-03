@@ -224,6 +224,8 @@ public class NotificationsAsynctask extends AsyncTask<CurrentState,Void,Void> {
 
     @Override
     protected void onPostExecute(Void aVoid) {
+
+
         super.onPostExecute(aVoid);
     }
 

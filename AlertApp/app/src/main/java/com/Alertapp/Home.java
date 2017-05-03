@@ -81,7 +81,7 @@ public class Home extends AppCompatActivity {
         tv_city=(TextView)findViewById(R.id.tvcity);
 
         addRulestoListview();
-        scheduleAlarm();
+
         registerReceiver(uiUpdated, new IntentFilter("LOCATION_UPDATED"));
     }
 
@@ -91,7 +91,7 @@ public class Home extends AppCompatActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
 
-             loc.longitude=Float.parseFloat(""+intent.getExtras().getFloat("longitude"));
+           /*  loc.longitude=Float.parseFloat(""+intent.getExtras().getFloat("longitude"));
              loc.latitude =Float.parseFloat(""+intent.getExtras().getFloat("latitude"));
              Geocoder gcd = new Geocoder(getBaseContext(),Locale.getDefault());
              List<Address> addresses;
@@ -119,7 +119,10 @@ public class Home extends AppCompatActivity {
             catch(Exception ex)
             {
                 ex.printStackTrace();
-            }
+            }*/
+
+            temperature=intent.getFloatExtra("temperature",1);
+            cityName=intent.getExtras().getString("city");
             tv_weather.setText(Float.toString(temperature));
             tv_city.setText(cityName);
 
@@ -129,7 +132,7 @@ public class Home extends AppCompatActivity {
             notificationintent =new Intent(context,GenerateNotificationService.class);
             notificationintent.putExtra("location",cityName);
             notificationintent.putExtra("temperature",temperature);
-            startService(notificationintent);
+        //    startService(notificationintent);
 
 
         }
@@ -137,20 +140,7 @@ public class Home extends AppCompatActivity {
 
 
 
-    public void scheduleAlarm() {
 
-        Intent intent = new Intent(getApplicationContext(), MyAlarmReceiver.class);
-
-        final PendingIntent pIntent = PendingIntent.getBroadcast(this, MyAlarmReceiver.REQUEST_CODE,
-                intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        long firstMillis = System.currentTimeMillis(); // alarm is set right away
-        AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
-
-        alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, firstMillis,
-                1*60*1000, pIntent);
-
-    }
 
 
     public void addRulestoListview()
@@ -211,7 +201,13 @@ public class Home extends AppCompatActivity {
 
     @Override
     protected void onStop() {
-        unregisterReceiver(uiUpdated);
+
+        try {
+            unregisterReceiver(uiUpdated);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
         super.onStop();
 
 

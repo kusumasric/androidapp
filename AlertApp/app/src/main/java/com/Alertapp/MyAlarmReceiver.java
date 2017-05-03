@@ -18,8 +18,7 @@ public class MyAlarmReceiver extends BroadcastReceiver {
 
         Intent i = new Intent(context, Locationservice.class);
         context.startService(i);
-      //  notificationintent =new Intent(context,GenerateNotificationService.class);
-      //  context.startService(notificationintent);
+
 
     }
 }
