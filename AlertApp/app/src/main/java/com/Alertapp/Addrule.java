@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -17,8 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
-import com.Alertapp.Home.*;
-
 import java.util.Calendar;
 
 /**
@@ -27,40 +24,35 @@ import java.util.Calendar;
 
 public class Addrule extends Activity implements AdapterView.OnItemSelectedListener {
 
-    EditText et_rulename,et_ruledesc;
-    String rulename,ruledesc;
-    DataStorage dbhandler=new DataStorage(this);
-
-    WeatherCondition weatherc=new WeatherCondition();
-    Locationcondition locationc=new Locationcondition();
-    Timecondition  timec=new Timecondition();
+    //TODO: specify modifiers
+    public EditText et_RuleName,et_RuleDesc,et_Date,et_Time,et_MinimumTemp,et_MaximumTemp;;
+    public String RuleName,RuleDesc;
+    public DataStorage dbhandler=new DataStorage(this);
+    public WeatherCondition weatherc=new WeatherCondition();
+    public Locationcondition locationc=new Locationcondition();
+    public Timecondition  timec=new Timecondition();
     int year,month,day,hours,minutes;
-    EditText et_date,et_time,et_min,et_max;
-    Calendar myCalendar;
+  //  Date date,time;
+  //  public SimpleDateFormat formatterdate = new SimpleDateFormat("dd-MM-yyyy");
+  //  public SimpleDateFormat formatter = new SimpleDateFormat("hh:mm");
     String str_date="",str_time="";
-    static final int dialognum=0;
     public DatePickerDialog fromDatePickerDialog;
-    public TimePickerDialog timepicker;
-
-    int selectedposition=0;
-    String mintemp,maxtemp;
-    String location="";
-
-    Context context;
+    public TimePickerDialog timePicker;
+    public int selectedPosition=0;
+    public String minTemp,maxTemp;
+    public String location="";
+    public Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-         setContentView(R.layout.addrule);
-
-         et_rulename=(EditText)findViewById(R.id.et_rulename);
-         et_ruledesc=(EditText)findViewById(R.id.et_ruledesc);
-
+        setContentView(R.layout.addrule);
+        et_RuleName=(EditText)findViewById(R.id.et_rulename);
+        et_RuleDesc=(EditText)findViewById(R.id.et_ruledesc);
         context = getApplicationContext();
         Spinner spinner_menu=(Spinner)findViewById(R.id.spinner_menu);
         ArrayAdapter<String> menuadapter= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.Menuitems));
         final ArrayAdapter<String> locationadapter= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.Locationitems));
-        final ArrayAdapter<String> weatheradapter= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.Weatheritems));
         menuadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_menu.setAdapter(menuadapter);
         spinner_menu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
@@ -71,19 +63,20 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
 
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+
                 if(position==0)                {
 
                     lLayout.removeAllViews();
                 }
                 if(position==1)
                 {
-                    selectedposition=1;
+                    selectedPosition=1;
                     lLayout.removeAllViews();
                     viewtime=inflater.inflate(R.layout.datetime,null);
                     lLayout.addView(viewtime);
-                    et_date=(EditText)viewtime.findViewById(R.id.et_date);
-                    et_date.setInputType(InputType.TYPE_NULL);
-                    et_time=(EditText)viewtime.findViewById(R.id.et_time);
+                    et_Date=(EditText)viewtime.findViewById(R.id.et_Date);
+                    et_Date.setInputType(InputType.TYPE_NULL);
+                    et_Time=(EditText)viewtime.findViewById(R.id.et_Time);
                     final Calendar c=Calendar.getInstance();
                     c.setTimeInMillis(System.currentTimeMillis() - 1000);
                     year=c.get(Calendar.YEAR);
@@ -96,24 +89,26 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
 
                         public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
                             str_date=dayOfMonth+"-"+(monthOfYear+1)+"-"+year;
-                            et_date.setText(str_date);
+
+                            et_Date.setText(str_date);
                             timec.setDate(str_date);
                         }
 
                     },c.get(Calendar.YEAR), c.get(Calendar.MONTH), c.get(Calendar.DAY_OF_MONTH));
                     fromDatePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
 
-                    timepicker=new TimePickerDialog(viewtime.getContext(),new TimePickerDialog.OnTimeSetListener(){
+                    timePicker=new TimePickerDialog(viewtime.getContext(),new TimePickerDialog.OnTimeSetListener(){
+
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 
                             str_time =hourOfDay+":"+minute;
-                            et_time.setText(str_time);
+                            et_Time.setText(str_time);
                             timec.setTime(str_time);
                         }
                     },hours,minutes,false);
 
-                    et_date.setOnClickListener(new View.OnClickListener() {
+                    et_Date.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             fromDatePickerDialog.show();
@@ -121,10 +116,10 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
                         }
                     });
 
-                    et_time.setOnClickListener(new View.OnClickListener() {
+                    et_Time.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            timepicker.show();
+                            timePicker.show();
 
                         }
                     });
@@ -134,7 +129,7 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
 
                 if(position==2)
                 {
-                    selectedposition=2;
+                    selectedPosition=2;
                     lLayout.removeAllViews();
                     viewlocation=inflater.inflate(R.layout.location,lLayout,false);
                     lLayout.addView(viewlocation);
@@ -170,14 +165,12 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
 
                 if(position==3)
                 {
-                    selectedposition=3;
+                    selectedPosition=3;
                     lLayout.removeAllViews();
                     viewweather=inflater.inflate(R.layout.weathersubmenu,null);
                     lLayout.addView(viewweather);
-                    et_min=(EditText)viewweather.findViewById(R.id.et_mintemp);
-                    et_max=(EditText)viewweather.findViewById(R.id.et_maxtemp);
-
-
+                    et_MinimumTemp=(EditText)viewweather.findViewById(R.id.et_mintemp);
+                    et_MaximumTemp=(EditText)viewweather.findViewById(R.id.et_maxtemp);
                     weatherc.rule.id=0;
 
                 }
@@ -189,50 +182,45 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
             }
         });
 
-
     }
 
 
     public void onclickadd(View view)
     {
-        rulename=et_rulename.getText().toString();
-        ruledesc=et_ruledesc.getText().toString();
-        Rule rulenew=new Rule(rulename,ruledesc);
+        RuleName=et_RuleName.getText().toString();
+        RuleDesc=et_RuleDesc.getText().toString();
+        Rule rulenew=new Rule(RuleName,RuleDesc);
         dbhandler.addRule(rulenew);
-      /*  Home home1=new Home();
-        home1.addRulestoListview();*/
-
-
-        if(selectedposition==1)
+        if(selectedPosition==1)
         {
             timec.date=str_date;
             timec.time=str_time;
             timec.rule=rulenew;
-            dbhandler.adddatetime(timec,rulename);
+            dbhandler.adddatetime(timec,RuleName);
         }
 
-        if(selectedposition==2)
+        if(selectedPosition==2)
         {
-
             locationc.setLocation(location);
             locationc.rule=rulenew;
-            dbhandler.addlocation(locationc,rulename);
+            dbhandler.addlocation(locationc,RuleName);
         }
 
-        if(selectedposition==3)
+        if(selectedPosition==3)
         {
-            mintemp=et_min.getText().toString();
-            maxtemp=et_max.getText().toString();
-            int mintemp1=Integer.parseInt(mintemp);
-            int maxtemp1=Integer.parseInt(maxtemp);
+            minTemp=et_MinimumTemp.getText().toString();
+            maxTemp=et_MaximumTemp.getText().toString();
+            maxTemp=et_MaximumTemp.getText().toString();
+            int mintemp1=Integer.parseInt(minTemp);
+            int maxtemp1=Integer.parseInt(maxTemp);
             weatherc.setMintemp(mintemp1);
             weatherc.setMaxtemp(maxtemp1);
             weatherc.rule=rulenew;
-            dbhandler.addweather(weatherc,rulename);
+            dbhandler.addweather(weatherc,RuleName);
         }
 
         super.onBackPressed();
-        //finish();
+
     }
 
     @Override
@@ -271,12 +259,9 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
 
     }
 
-
-
     public void onclickcancel(View view)
     {
             finish();
-
     }
 
     @Override

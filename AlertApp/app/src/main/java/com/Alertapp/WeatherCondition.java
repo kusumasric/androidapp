@@ -7,13 +7,14 @@ package com.Alertapp;
 public class WeatherCondition  extends Basecondition{
 
 
-    int mintemp, maxtemp;
-    int id;
+    public int minTemp, maxTemp;
+    public int id;
+
     @Override
     public boolean isConditionSatisfied(CurrentState cs) {
         float temp=cs.getCurrentweather();
-        int  minval=Float.compare(temp,mintemp);
-        int maxval=Float.compare(maxtemp,temp);
+        int  minval=Float.compare(temp,minTemp);
+        int maxval=Float.compare(maxTemp,temp);
         if(minval>0 && maxval >0)
                 return true;
         return false;
@@ -24,19 +25,19 @@ public class WeatherCondition  extends Basecondition{
     }
 
     public int getMintemp() {
-        return mintemp;
+        return minTemp;
     }
 
-    public void setMintemp(int mintemp) {
-        this.mintemp = mintemp;
+    public void setMintemp(int minTemp) {
+        this.minTemp = minTemp;
     }
 
     public int getMaxtemp() {
-        return maxtemp;
+        return maxTemp;
     }
 
-    public void setMaxtemp(int maxtemp) {
-        this.maxtemp = maxtemp;
+    public void setMaxtemp(int maxTemp) {
+        this.maxTemp = maxTemp;
     }
 
     public int getId() {

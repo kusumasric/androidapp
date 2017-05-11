@@ -9,8 +9,8 @@ import android.util.Log;
 
 public class Locationcondition extends Basecondition {
 
-    String location="";
-    int id;
+    public String location="";
+    public int id;
 
     public int getId() {
         return id;
@@ -20,18 +20,15 @@ public class Locationcondition extends Basecondition {
         this.id = id;
     }
 
-
     @Override
     public boolean isConditionSatisfied(CurrentState cs) {
-        Log.d(cs.currentlocation.trim() + " " + location.trim(),cs.currentlocation.trim() + " " + location.trim());
-        boolean result = cs.currentlocation.trim().equalsIgnoreCase(location.trim());
+        Log.d(cs.currentLocation.trim() + " " + location.trim(),cs.currentLocation.trim() + " " + location.trim());
+        boolean result = cs.currentLocation.trim().equalsIgnoreCase(location.trim());
         return result;
-        /*if(cs.currentlocation.trim().equalsIgnoreCase(location.trim()) == true)
-            return true;
-        return false;*/
     }
 
     public String getLocation() {
+
         return location;
     }
 

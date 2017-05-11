@@ -6,9 +6,10 @@ package com.Alertapp;
 
 public class Rule {
 
-    int id;
-    String Rulename;
-    String Ruledesc;
+    public int id;
+    public String ruleName;
+    public String ruleDesc;
+
     public Rule()
     {
 
@@ -16,8 +17,8 @@ public class Rule {
 
     public Rule(String rulename,String ruledes)
     {
-        Rulename=rulename;
-        Ruledesc=ruledes;
+        ruleName=rulename;
+        ruleDesc=ruledes;
     }
 
     public void setid(int id)
@@ -27,11 +28,11 @@ public class Rule {
 
     public void setrulename(String rulename)
     {
-        this.Rulename=rulename;
+        this.ruleName=rulename;
     }
     public void setRuledesc(String ruledesc)
     {
-        this.Ruledesc=ruledesc;
+        this.ruleDesc=ruledesc;
     }
 
     public int getid()
@@ -41,11 +42,11 @@ public class Rule {
 
     public String getRulename()
     {
-        return Rulename;
+        return ruleName;
     }
     public String getRuledesc()
     {
-        return Ruledesc;
+        return ruleDesc;
     }
 
 }

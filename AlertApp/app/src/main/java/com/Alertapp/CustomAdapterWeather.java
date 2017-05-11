@@ -13,25 +13,25 @@ import java.util.ArrayList;
  * Created by kusumasri on 4/4/17.
  */
 
-public class CustomAdapter extends BaseAdapter {
+public class CustomAdapterWeather extends BaseAdapter {
 
 
     private Context context;
-    private ArrayList<Rule> rules;
+    private ArrayList<WeatherCondition> array_weather;
 
     @Override
     public int getCount() {
-        return rules.size();
+        return array_weather.size();
     }
 
-    public CustomAdapter(Context context,ArrayList<Rule> rules) {
-        this.rules = rules;
+    public CustomAdapterWeather(Context context, ArrayList<WeatherCondition> weatherconditions) {
+        this.array_weather = weatherconditions;
         this.context = context;
     }
 
     @Override
     public Object getItem(int position) {
-        return rules.get(position);
+        return array_weather.get(position);
     }
 
     @Override
@@ -44,11 +44,13 @@ public class CustomAdapter extends BaseAdapter {
        View v=View.inflate(context,R.layout.singlerowlistview,null);
        TextView tv_rulename=(TextView)v.findViewById(R.id.tv_rulename);
        TextView tv_ruledesc=(TextView)v.findViewById(R.id.tv_ruledesc);
+       TextView tv_condition=(TextView)v.findViewById(R.id.tv_condition);
        ImageView imageview=(ImageView)v.findViewById(R.id.imageView);
        imageview.setImageResource(R.drawable.images);
-       tv_rulename.setText(rules.get(position).getRulename());
-       tv_ruledesc.setText(rules.get(position).getRuledesc());
-       v.setTag(rules.get(position).getid());
+       tv_rulename.setText(array_weather.get(position).rule.getRulename());
+       tv_ruledesc.setText(array_weather.get(position).rule.getRuledesc());
+       tv_condition.setText(array_weather.get(position).getMintemp()+"-"+array_weather.get(position).getMaxtemp()+" \u2103");
+       v.setTag(array_weather.get(position).rule.getid());
        return v;
     }
 }

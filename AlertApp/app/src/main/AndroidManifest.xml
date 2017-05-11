@@ -16,15 +16,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.Alertapp.Home"></activity>
-        <activity android:name="com.Alertapp.SignIn"></activity>
+        <activity android:name="com.Alertapp.HomePage"></activity>
         <activity android:name="com.Alertapp.Addrule"></activity>
 
-        <service android:name=".GenerateNotification"/>
-        <service android:name=".GenerateNotificationService"/>
-        <service android:name=".Locationservice"/>
+        <service android:name=".ServiceCallsAsync"/>
         <receiver
-            android:name=".MyAlarmReceiver"
+            android:name=".ReceiverStartService"
             android:process=":remote" >
         </receiver>
     </application>

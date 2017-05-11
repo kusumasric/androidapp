@@ -14,11 +14,11 @@ import java.util.ArrayList;
 
 public class DataStorage extends SQLiteOpenHelper {
 
-    public  static final int dbversion=11;
+    public  static final int dbVersion=15;
 
     public DataStorage(Context context)
     {
-        super(context, "Database.db",null,dbversion);
+        super(context, "Database.db",null,dbVersion);
     }
 
     @Override
@@ -56,18 +56,17 @@ public class DataStorage extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void addrow(user user)
+    public void addrow(User User)
     {
         ContentValues val=new ContentValues();
-        val.put("username",user.getuname());
-        val.put("password",user.getpass());
+        val.put("username", User.getuname());
+        val.put("password", User.getpass());
         SQLiteDatabase db=getWritableDatabase();
         db.insert("authentication",null,val);
         db.close();
     }
 
-
-//To add weather condition
+    //To add weather condition
     public void addweather(WeatherCondition wc,String rulename)
     {
         SQLiteDatabase db=getWritableDatabase();
@@ -120,7 +119,6 @@ public class DataStorage extends SQLiteOpenHelper {
 
     }
 
-
     //To add datetime condition
     public void adddatetime(Timecondition tc,String rulename)
     {
@@ -148,28 +146,31 @@ public class DataStorage extends SQLiteOpenHelper {
 
     }
 
-
-
-//To delete weather
+    //To delete weather
     public void deleteweather(int id)
     {
         SQLiteDatabase db=getWritableDatabase();
-        //String string =String.valueOf(id);
         db.execSQL("DELETE FROM weathercondition WHERE  ruleid=\""+id+"\";");
         deleterule(id);
     }
-
 
     //To delete location
     public void deletelocation(int id)
     {
         SQLiteDatabase db=getWritableDatabase();
-        //String string =String.valueOf(id);
         db.execSQL("DELETE FROM locationcondition WHERE  ruleid=\""+id+"\";");
         deleterule(id);
     }
 
-//To delete User
+    //To delete location
+    public void deletetime(int id)
+    {
+        SQLiteDatabase db=getWritableDatabase();
+        db.execSQL("DELETE FROM datetimecondition WHERE  ruleid=\""+id+"\";");
+        deleterule(id);
+    }
+
+    //To delete User
     public void deleteuser(String usern)
     {
         SQLiteDatabase db=getWritableDatabase();
@@ -185,7 +186,7 @@ public class DataStorage extends SQLiteOpenHelper {
                 do {
                      String newpass=Utils.Convertpasstohash(password);
                      String pass= c.getString(c.getColumnIndex("password"));
-                       if(newpass.equals(pass))
+                     if(newpass.equals(pass))
                            return true;
                 }while (c.moveToNext());
             }
@@ -194,7 +195,6 @@ public class DataStorage extends SQLiteOpenHelper {
     }
 
     //To get all the rules
-
     public ArrayList<Rule> getrules()
     {
         ArrayList<Rule> arrayrules=new ArrayList<>();
@@ -205,7 +205,7 @@ public class DataStorage extends SQLiteOpenHelper {
             Cursor cursor = db.rawQuery(selectQuery, null);
             try {
 
-                    if (cursor.moveToFirst()) {
+                if (cursor.moveToFirst()) {
                     do {
                         Rule obj = new Rule();
                         obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
@@ -213,15 +213,19 @@ public class DataStorage extends SQLiteOpenHelper {
                         obj.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
                       arrayrules.add(obj);
                     } while (cursor.moveToNext());
+                }
+            }finally {
+                try {
+                    cursor.close();
+                } catch (Exception ignore) {}
             }
-            } finally {
-                try { cursor.close(); } catch (Exception ignore) {}
-        }
 
         } finally {
-            try { db.close(); } catch (Exception ignore) {}
+            try {
+                db.close();
+            } catch (Exception ignore) {
+            }
         }
-
         return arrayrules;
     }
 
@@ -261,8 +265,6 @@ public class DataStorage extends SQLiteOpenHelper {
         return arrayweather;
     }
 
-
-
     //To get all locationconditions
     public ArrayList<Locationcondition> getlocationcondition()
     {
@@ -277,14 +279,14 @@ public class DataStorage extends SQLiteOpenHelper {
 
                 if (cursor.moveToFirst()) {
                     do {
-                            Locationcondition obj = new Locationcondition();
-                            obj.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                            obj.setLocation(cursor.getString(cursor.getColumnIndex("location")));
-                            obj.rule.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
-                            obj.rule.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
-                            obj.setruleid(cursor.getInt(cursor.getColumnIndex("ruleid")));
 
-                            arraylocation.add(obj);
+                        Locationcondition obj = new Locationcondition();
+                        obj.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                        obj.setLocation(cursor.getString(cursor.getColumnIndex("location")));
+                        obj.rule.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
+                        obj.rule.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
+                        obj.setruleid(cursor.getInt(cursor.getColumnIndex("ruleid")));
+                        arraylocation.add(obj);
                     } while (cursor.moveToNext());
                 }
             } finally {
@@ -335,22 +337,13 @@ public class DataStorage extends SQLiteOpenHelper {
     }
 
 
-
-
-
-
-
-
-
-
-//To delete rules
-
+    //To delete rules
     public void deleterule(int id)
     {
         SQLiteDatabase db=getWritableDatabase();
         //String string =String.valueOf(id);
         db.execSQL("DELETE FROM rules WHERE  id=\""+id+"\";");
-        Cursor c=db.rawQuery("SELECT id FROM weathercondition WHERE ruleid=\""+id+"\";",null);
+       /* Cursor c=db.rawQuery("SELECT id FROM weathercondition WHERE ruleid=\""+id+"\";",null);
         if (c != null ) {
             if  (c.moveToFirst()) {
                 do {
@@ -381,10 +374,11 @@ public class DataStorage extends SQLiteOpenHelper {
 
                 }while (c.moveToNext());
             }
-        }
+        }*/
 
-
+       deletelocation(id);
+       deleteweather(id);
+       deletelocation(id);
     }
-
 
 }

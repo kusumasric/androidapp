@@ -22,7 +22,7 @@
             android:text=""
             android:background="@color/grey"
             android:padding="5dp"
-            android:id="@+id/et_date"
+            android:id="@+id/et_Date"
             android:layout_margin="5dp"
             android:focusable="false"
             android:layout_height="wrap_content" />
@@ -40,13 +40,12 @@
             android:layout_marginRight="5dp"
             android:layout_height="wrap_content" />
 
-
         <EditText
             android:layout_width="150dp"
             android:padding="5dp"
             android:layout_margin="5dp"
             android:background="@color/grey"
-            android:id="@+id/et_time"
+            android:id="@+id/et_Time"
             android:focusable="false"
             android:layout_height="wrap_content" />
 

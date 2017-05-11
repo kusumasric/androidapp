@@ -12,19 +12,15 @@ import java.util.Date;
 public class Timecondition extends Basecondition {
 
 
-    String time,date;
-    int id;
-    int currenthr=0,hrs=0,currentmin=0,min=0 ;
-    Date date1=new Date();
-    Date currentdate=new Date();
-    SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-hh:mm");
-
-
-    boolean result=false;
+    public String time,date;
+    public int id;
+    public Date date1=new Date();
+    public Date currentDate=new Date();
+    public SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-hh:mm");
+    public boolean result=false;
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -32,33 +28,17 @@ public class Timecondition extends Basecondition {
     @Override
     public boolean isConditionSatisfied(CurrentState cs)  {
 
-     /*  if(date.trim().equals(cs.getCurrentdate().trim()))
-       {
-           String[] timesplit=time.split(":");
-           String[] currenttime=cs.getCurrenttime().split(":");
-           hrs=Integer.parseInt(timesplit[0]);
-           min=Integer.parseInt(timesplit[1]);
-           currenthr=Integer.parseInt(currenttime[0]);
-           currentmin=Integer.parseInt(currenttime[1]);
-            if(hrs==currenthr && min==currentmin)
-                result=true;
-            else
-                result=false;
-       }*/
         try {
             date1=formatter.parse(date+"-"+time);
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-            currentdate=cs.getDate();
-
-        long diff =Math.abs(date1.getTime()-(currentdate).getTime());
+        currentDate=cs.getDate();
+        long diff =Math.abs(date1.getTime()-(currentDate).getTime());
         if(diff < 3 *60*1000)
         {
             result=true;
         }
-
        return result;
     }
 

@@ -76,18 +76,59 @@
         android:elevation="10dp"
         android:layout_height="0dp">
         <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:fillViewport="true"
             android:scrollbars="vertical">
 
             <ListView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:id="@+id/listview"
-                android:layout_height="match_parent" >
+                android:layout_height="wrap_content" >
             </ListView>
 
         </ScrollView>
+
+
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:id="@+id/listview_weather"
+                android:layout_height="wrap_content" >
+            </ListView>
+
+        </ScrollView>
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+            <ListView
+                android:layout_width="wrap_content"
+                android:id="@+id/listview_location"
+                android:layout_height="wrap_content" >
+            </ListView>
+
+        </ScrollView>
+        <ScrollView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fillViewport="true"
+            android:scrollbars="vertical">
+
+             <ListView
+                android:layout_width="wrap_content"
+                android:id="@+id/listview_time"
+                android:layout_height="wrap_content" >
+            </ListView>
+        </ScrollView>
+
 
         <android.support.design.widget.FloatingActionButton
             android:layout_height="50dp"

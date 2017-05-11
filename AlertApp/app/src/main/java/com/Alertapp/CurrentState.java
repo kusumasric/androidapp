@@ -10,29 +10,30 @@ import java.util.Date;
  */
 
 public class CurrentState {
-    float currentweather=0;
-    String currentlocation="";
-    Date d=new Date();
-    Context context;
+
+    public float currentWeather=0;
+    public String currentLocation="";
+    public Date date=new Date();
+    public Context context;
 
     public float getCurrentweather() {
-        return currentweather;
+        return currentWeather;
     }
 
-    public void setCurrentweather(float currentweather) {
-        this.currentweather = currentweather;
+    public void setCurrentweather(float currentWeather) {
+        this.currentWeather = currentWeather;
     }
 
     public String getCurrentlocation() {
-        return currentlocation;
+        return currentLocation;
     }
 
-    public void setCurrentlocation(String currentlocation) {
-        this.currentlocation = currentlocation;
+    public void setCurrentlocation(String currentLocation) {
+        this.currentLocation = currentLocation;
     }
     public Date getDate()
     {
-        return d;
+        return date;
     }
 
 }
