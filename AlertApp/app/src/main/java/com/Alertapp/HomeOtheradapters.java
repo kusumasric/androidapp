@@ -96,9 +96,7 @@ public class HomeOtheradapters extends AppCompatActivity {
     public void addRulestoListview()
     {
 
-        wlist=(ListView)findViewById(R.id.listview_weather);
-        llist=(ListView)findViewById(R.id.listview_location);
-        tlist=(ListView)findViewById(R.id.listview_time);
+
         ruleList=(ListView)findViewById(R.id.listview);
 
           arlist=data.getrules();
