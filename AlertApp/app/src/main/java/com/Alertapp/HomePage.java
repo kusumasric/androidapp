@@ -26,25 +26,27 @@ import java.util.HashMap;
 public class HomePage extends AppCompatActivity {
 
 
-    public String name = "";
+    // TODO: dont have to initialize to blank . Its blank by default in java
+    public String name;
     public static final HashMap<Integer,Date> Track_rule=new HashMap<>();
     //TODO:use full names - here weatherlistview
-    public ListView Rulelist,wlist,tlist,llist;
+    public ListView Rulelist;//,wlist,tlist,llist;
     //TODO: name these as weatherConditions
+    /*
     public ArrayList<WeatherCondition> weatherlist;
     public ArrayList<Locationcondition> locationlist;
     public ArrayList<Timecondition> timelist;
+    */
     public ArrayList<Rule> arlist;
     public CustomAdapter adapter;
-    //TODO: variableFormat should be consistent - Use camel case everywhere
     //TODO: write formatting rules somewhere and the whole codebase should be consistent
-    public CustomAdapterWeather weather_adapter;
+    /*public CustomAdapterWeather weather_adapter;
     public CustomAdapterTime time_adapter;
-    public CustomAdapterLocation location_adapter;
+    public CustomAdapterLocation location_adapter;*/
     public String cityName="";
     public float temperature;
     public DataStorage data =new DataStorage(this);
-    public  TextView tv_weather,tv_city;
+    public  TextView tv_weather,tv_city,tv_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,13 +54,16 @@ public class HomePage extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+        // TODO: extras should never be null so dont add the if condition
         if (extras != null) {
             name = extras.getString("name");
         }
         scheduleAlarm();
-        String hello = "hello" + name;
-        TextView text = (TextView) findViewById(R.id.hellou);
-        text.setText(hello);
+        String hello = "hello " + name;
+        // TODO: textview variable should be prefixed with "tv_".
+        // TODO: no need to create another variable hello here. Use it directly in setText
+        tv_name = (TextView) findViewById(R.id.hellou);
+        tv_name.setText(hello);
         tv_weather=(TextView)findViewById(R.id.tvweather);
         tv_city=(TextView)findViewById(R.id.tvcity);
         addRulestoListview();
@@ -68,7 +73,6 @@ public class HomePage extends AppCompatActivity {
 
 
     public void scheduleAlarm() {
-        //TODO:Put this after signup/signin is successful
         Intent intent = new Intent(getApplicationContext(), ReceiverStartService.class);
         final PendingIntent pIntent = PendingIntent.getBroadcast(this, ReceiverStartService.REQUEST_CODE,
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -81,6 +85,7 @@ public class HomePage extends AppCompatActivity {
 
     private BroadcastReceiver uiUpdated= new BroadcastReceiver() {
 
+        // TODO: name the intent variable better
         @Override
         public void onReceive(Context context, Intent intent) {
 
@@ -98,7 +103,7 @@ public class HomePage extends AppCompatActivity {
         Rulelist=(ListView)findViewById(R.id.listview);
         arlist=data.getrules();
 
-
+        // TODO: rename arlist to something better
         if(arlist.size()>0) {
             adapter = new CustomAdapter(getApplicationContext(), arlist);
             Rulelist.setAdapter(adapter);
@@ -114,6 +119,7 @@ public class HomePage extends AppCompatActivity {
                     Rule r1=(Rule)parent.getItemAtPosition(position);
                     data.deleterule(r1.getid());
                     arlist.remove(position);
+                    // TODO: Why create adaptor again and also why setAdapter again ?
                     adapter = new CustomAdapter(getApplicationContext(),arlist);
                     Rulelist.setAdapter(adapter);
                     return false;
@@ -124,6 +130,7 @@ public class HomePage extends AppCompatActivity {
         }
     }
 
+    // TODO: Remove default implementations
     @Override
     protected void onStart() {
         super.onStart();

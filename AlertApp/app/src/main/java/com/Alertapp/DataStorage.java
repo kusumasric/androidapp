@@ -343,7 +343,7 @@ public class DataStorage extends SQLiteOpenHelper {
         SQLiteDatabase db=getWritableDatabase();
         //String string =String.valueOf(id);
         db.execSQL("DELETE FROM rules WHERE  id=\""+id+"\";");
-       /* Cursor c=db.rawQuery("SELECT id FROM weathercondition WHERE ruleid=\""+id+"\";",null);
+        Cursor c=db.rawQuery("SELECT id FROM weathercondition WHERE ruleid=\""+id+"\";",null);
         if (c != null ) {
             if  (c.moveToFirst()) {
                 do {
@@ -374,11 +374,7 @@ public class DataStorage extends SQLiteOpenHelper {
 
                 }while (c.moveToNext());
             }
-        }*/
-
-       deletelocation(id);
-       deleteweather(id);
-       deletelocation(id);
+        }
     }
 
 }
