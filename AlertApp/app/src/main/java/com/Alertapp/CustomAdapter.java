@@ -41,13 +41,27 @@ public class CustomAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-       View v=View.inflate(context,R.layout.singlerowlistview,null);
+       View v=View.inflate(context,R.layout.activity_home_listview_singlerow,null);
        TextView tv_rulename=(TextView)v.findViewById(R.id.tv_rulename);
        TextView tv_ruledesc=(TextView)v.findViewById(R.id.tv_ruledesc);
+       TextView tv_condition=(TextView)v.findViewById(R.id.tv_condition);
        ImageView imageview=(ImageView)v.findViewById(R.id.imageView);
-       imageview.setImageResource(R.drawable.images);
+
        tv_rulename.setText(rules.get(position).getRulename());
        tv_ruledesc.setText(rules.get(position).getRuledesc());
+       Basecondition basecondition=rules.get(position).getBaseconditionobj();
+       if(basecondition instanceof WeatherCondition ) {
+           imageview.setImageResource(R.drawable.weatherimage);
+           tv_condition.setText(((WeatherCondition) basecondition).getMintemp() + "-" + ((WeatherCondition) basecondition).getMaxtemp());
+       }
+       if(basecondition instanceof Locationcondition ) {
+           imageview.setImageResource(R.drawable.transperantlocation);
+           tv_condition.setText(((Locationcondition) basecondition).getLocation());
+       }
+       if(basecondition instanceof Timecondition) {
+           imageview.setImageResource(R.drawable.transperantclock);
+           tv_condition.setText(((Timecondition) basecondition).getDate() + "-" + ((Timecondition) basecondition).getTime());
+       }
        v.setTag(rules.get(position).getid());
        return v;
     }

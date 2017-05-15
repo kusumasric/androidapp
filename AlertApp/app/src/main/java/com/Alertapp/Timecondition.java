@@ -13,16 +13,16 @@ public class Timecondition extends Basecondition {
 
 
     public String time,date;
-    public int id;
+
     public Date date1=new Date();
     public Date currentDate=new Date();
     public SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-hh:mm");
     public boolean result=false;
     public int getId() {
-        return id;
+        return conditionId;
     }
     public void setId(int id) {
-        this.id = id;
+        this.conditionId = id;
     }
 
     @Override
@@ -61,14 +61,10 @@ public class Timecondition extends Basecondition {
         this.date = date;
     }
 
-    public void Timecondition()
+    public Timecondition()
     {
 
-    }
-    public void setruleid(int ruleid)
-    {
-        rule.id=ruleid;
-    }
 
+    }
 
 }

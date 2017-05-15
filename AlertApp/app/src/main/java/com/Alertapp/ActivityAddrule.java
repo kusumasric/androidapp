@@ -16,13 +16,14 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
 
+import java.sql.Time;
 import java.util.Calendar;
 
 /**
  * Created by kusumasri on 4/1/17.
  */
 
-public class Addrule extends Activity implements AdapterView.OnItemSelectedListener {
+public class ActivityAddrule extends Activity implements AdapterView.OnItemSelectedListener {
 
     //TODO: specify modifiers
     public EditText et_RuleName,et_RuleDesc,et_Date,et_Time,et_MinimumTemp,et_MaximumTemp;;
@@ -46,9 +47,9 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.addrule);
+        setContentView(R.layout.activity_home_fab_addrule);
         et_RuleName=(EditText)findViewById(R.id.et_rulename);
-        et_RuleDesc=(EditText)findViewById(R.id.et_ruledesc);
+
         context = getApplicationContext();
         Spinner spinner_menu=(Spinner)findViewById(R.id.spinner_menu);
         ArrayAdapter<String> menuadapter= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.Menuitems));
@@ -72,11 +73,12 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
                 {
                     selectedPosition=1;
                     lLayout.removeAllViews();
-                    viewtime=inflater.inflate(R.layout.datetime,null);
+                    viewtime=inflater.inflate(R.layout.activity_home_fab_datetime_selection,null);
                     lLayout.addView(viewtime);
                     et_Date=(EditText)viewtime.findViewById(R.id.et_Date);
                     et_Date.setInputType(InputType.TYPE_NULL);
                     et_Time=(EditText)viewtime.findViewById(R.id.et_Time);
+                    et_RuleDesc=(EditText)viewtime.findViewById(R.id.et_ruledesc);
                     final Calendar c=Calendar.getInstance();
                     c.setTimeInMillis(System.currentTimeMillis() - 1000);
                     year=c.get(Calendar.YEAR);
@@ -124,15 +126,15 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
                         }
                     });
 
-                    timec.rule.id=0;
                 }
 
                 if(position==2)
                 {
                     selectedPosition=2;
                     lLayout.removeAllViews();
-                    viewlocation=inflater.inflate(R.layout.location,lLayout,false);
+                    viewlocation=inflater.inflate(R.layout.activity_home_fab_location_selection,lLayout,false);
                     lLayout.addView(viewlocation);
+                    et_RuleDesc=(EditText)viewlocation.findViewById(R.id.et_ruledesc);
                     Spinner spinner_location=(Spinner)viewlocation.findViewById(R.id.locationspinner);
                     locationadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_location.setAdapter(locationadapter);
@@ -159,20 +161,17 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
 
                         }
                     });
-                    locationc.rule.id=0;
-
-                }
+                                  }
 
                 if(position==3)
                 {
                     selectedPosition=3;
                     lLayout.removeAllViews();
-                    viewweather=inflater.inflate(R.layout.weathersubmenu,null);
+                    viewweather=inflater.inflate(R.layout.activity_home_fab_weather,null);
                     lLayout.addView(viewweather);
+                    et_RuleDesc=(EditText)viewweather.findViewById(R.id.et_ruledesc);
                     et_MinimumTemp=(EditText)viewweather.findViewById(R.id.et_mintemp);
                     et_MaximumTemp=(EditText)viewweather.findViewById(R.id.et_maxtemp);
-                    weatherc.rule.id=0;
-
                 }
             }
 
@@ -189,21 +188,20 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
     {
         RuleName=et_RuleName.getText().toString();
         RuleDesc=et_RuleDesc.getText().toString();
-        Rule rulenew=new Rule(RuleName,RuleDesc);
-        dbhandler.addRule(rulenew);
+        Rule rulenew;
         if(selectedPosition==1)
         {
             timec.date=str_date;
             timec.time=str_time;
-            timec.rule=rulenew;
-            dbhandler.adddatetime(timec,RuleName);
+            rulenew=new Rule(RuleName,RuleDesc,timec);
+            dbhandler.adddatetime(timec,rulenew);
         }
 
         if(selectedPosition==2)
         {
             locationc.setLocation(location);
-            locationc.rule=rulenew;
-            dbhandler.addlocation(locationc,RuleName);
+            rulenew=new Rule(RuleName,RuleDesc,locationc);
+            dbhandler.addlocation(locationc,rulenew);
         }
 
         if(selectedPosition==3)
@@ -215,18 +213,16 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
             int maxtemp1=Integer.parseInt(maxTemp);
             weatherc.setMintemp(mintemp1);
             weatherc.setMaxtemp(maxtemp1);
-            weatherc.rule=rulenew;
-            dbhandler.addweather(weatherc,RuleName);
+            rulenew=new Rule(RuleName,RuleDesc,weatherc);
+            dbhandler.addweather(weatherc,rulenew);
         }
 
         super.onBackPressed();
-
     }
 
     @Override
     protected void onStart() {
         super.onStart();
-
     }
 
     @Override
@@ -256,7 +252,6 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
     }
 
     public void onclickcancel(View view)
@@ -266,7 +261,7 @@ public class Addrule extends Activity implements AdapterView.OnItemSelectedListe
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        
+
     }
 
     @Override

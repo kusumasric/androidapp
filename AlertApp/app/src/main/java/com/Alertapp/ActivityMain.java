@@ -2,7 +2,6 @@ package com.Alertapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -10,7 +9,7 @@ import android.widget.EditText;
 
 // TODO: Follow naming format for activity classes and activity layout as per
 // http://stackoverflow.com/questions/5582079/layout-files-naming-conventions
-public class MainActivity extends AppCompatActivity {
+public class ActivityMain extends AppCompatActivity {
 
     public EditText et_Name,et_Pass,et_Conpass;
     public Context context;
@@ -27,8 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onclicksignup(View view)
     {
-        Intent intent = new Intent (getApplicationContext(),HomePage.class);
-        intent.putExtra("name",et_Name.getText().toString());
+        Intent intent = new Intent (getApplicationContext(),ActivityHome.class);
         String password = et_Pass.getText().toString();
         String confpass = et_Conpass.getText().toString();
         if(password.equals(confpass))
@@ -50,13 +48,12 @@ public class MainActivity extends AppCompatActivity {
     {
         String password = et_Pass.getText().toString();
         String name = et_Name.getText().toString();
-
         DataStorage data =new DataStorage(this);
         boolean res=data.getpass(name,password);
         if(res)
         {
-            Intent intent = new Intent(getApplicationContext(), HomePage.class);
-            intent.putExtra("name", et_Name.getText().toString());
+            Intent intent = new Intent(getApplicationContext(), ActivityHome.class);
+
             startActivity(intent);
 
         }
@@ -82,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         dlgAlert.setCancelable(true);
         dlgAlert.show();
     }
-    
+
     //TODO: below functions are un-necessary
 
 

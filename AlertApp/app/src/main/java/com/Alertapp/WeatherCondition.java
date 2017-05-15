@@ -8,7 +8,7 @@ public class WeatherCondition  extends Basecondition{
 
 
     public int minTemp, maxTemp;
-    public int id;
+
 
     @Override
     public boolean isConditionSatisfied(CurrentState cs) {
@@ -19,10 +19,7 @@ public class WeatherCondition  extends Basecondition{
                 return true;
         return false;
     }
-    public void WeatherCondition()
-    {
 
-    }
 
     public int getMintemp() {
         return minTemp;
@@ -41,23 +38,12 @@ public class WeatherCondition  extends Basecondition{
     }
 
     public int getId() {
-        return id;
+        return conditionId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.conditionId = id;
     }
-
-    public  void setid(int id)
-    {
-        id=id;
-    }
-
-    public void setruleid(int ruleid)
-    {
-        rule.id=ruleid;
-    }
-
 
 
 }

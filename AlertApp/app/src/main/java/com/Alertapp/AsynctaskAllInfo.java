@@ -22,6 +22,7 @@ import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -44,11 +45,9 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
     public List<Address> listAddresses = null;
 
     //Notification parameters
-    public ArrayList<Locationcondition> array_location=new ArrayList<>();
-    public ArrayList<WeatherCondition> array_weather=new ArrayList<>();
-    public ArrayList<Timecondition>  array_datetime=new ArrayList<>();
+    public ArrayList<Rule>  arrayallrules=new ArrayList<>();
     public DataStorage data;
-    public HomePage home;
+    public ActivityHome home;
     public Date currentDate=new Date();
     public LocationGps loc=new LocationGps();
     public CurrentState presentState=new CurrentState();
@@ -116,7 +115,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int color = 0x008000;
             notification.setColor(color);
-            notification.setSmallIcon(R.drawable.images);
+            notification.setSmallIcon(R.drawable.messages);
 
 
         } else {
@@ -124,158 +123,64 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
         }
 
         currentDate=presentState.getDate();
-
-        array_weather=data.getweathercondition();
-        array_location=data.getlocationcondition();
-        array_datetime=data.gettimecondition();
+        arrayallrules=data.getrules();
         Intent[] intents = new Intent[1];
-        intents[0] = new Intent(context,MainActivity.class);
+        intents[0] = new Intent(context,ActivityMain.class);
 
-
-        for(int i=0;i<array_location.size();i++)
+        //Rules
+        for(int i=0;i<arrayallrules.size();i++)
         {
-            if(array_location.get(i).isConditionSatisfied(presentState))
-            {
-                if(home.Track_rule.containsKey(array_location.get(i).rule.getid()))
+            try {
+                if(arrayallrules.get(i).baseconditionobj.isConditionSatisfied(presentState))
                 {
-                    databaseDate=home.Track_rule.get(array_location.get(i).rule.getid());
-                    if(databaseDate.equals(currentDate))
+                    if(home.Track_rule.containsKey(arrayallrules.get(i).getid()))
                     {
-
-                        if(databaseDate.getTime()-currentDate.getTime() > 30*60*1000 )
+                        databaseDate=home.Track_rule.get(arrayallrules.get(i).getid());
+                        if(databaseDate.equals(currentDate))
                         {
-                            notification.setTicker(" kusuma");
-                            notification.setWhen(System.currentTimeMillis());
-                            notification.setContentTitle(array_location.get(i).rule.getRulename());
-                            notification.setContentText(array_location.get(i).rule.getRuledesc());
-                            PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
-                            notification.setContentIntent(pintent);
-                            NotificationManager nm = (NotificationManager)context. getSystemService(NOTIFICATION_SERVICE);
-                            nm.notify(num++, notification.build());
-                        }
 
-                        databaseDate=currentDate;
-                        home.Track_rule.put(array_location.get(i).rule.getid(),databaseDate);
+                            if(databaseDate.getTime()-currentDate.getTime() > 30*60*1000 )
+                            {
+                                notification.setTicker(" kusuma");
+                                notification.setWhen(System.currentTimeMillis());
+                                notification.setContentTitle(arrayallrules.get(i).getRulename());
+                                notification.setContentText(arrayallrules.get(i).getRuledesc());
+                                PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
+                                notification.setContentIntent(pintent);
+                                NotificationManager nm = (NotificationManager)context. getSystemService(NOTIFICATION_SERVICE);
+                                nm.notify(num++, notification.build());
+                            }
+
+                            databaseDate=currentDate;
+                            home.Track_rule.put(arrayallrules.get(i).getid(),databaseDate);
+
+                        }
 
                     }
 
+                    else
+                    {
+
+                        notification.setTicker(" kusuma");
+                        notification.setWhen(System.currentTimeMillis());
+                        notification.setContentTitle(arrayallrules.get(i).getRulename());
+                        notification.setContentText(arrayallrules.get(i).getRuledesc());
+                        PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
+                        notification.setContentIntent(pintent);
+                        NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
+                        nm.notify(num++, notification.build());
+                        home.Track_rule.put(arrayallrules.get(i).getid(),currentDate);
+                    }
+
                 }
-
-                else
-                {
-
-                    notification.setTicker(" kusuma");
-                    notification.setWhen(System.currentTimeMillis());
-                    notification.setContentTitle(array_location.get(i).rule.getRulename());
-                    notification.setContentText(array_location.get(i).rule.getRuledesc());
-                    PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
-                    notification.setContentIntent(pintent);
-                    NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
-                    nm.notify(num++, notification.build());
-                    home.Track_rule.put(array_location.get(i).rule.getid(),currentDate);
-                }
-
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
 
         }
 
-        for(Timecondition timeCondition: array_datetime)
-        {
-            if(timeCondition.isConditionSatisfied(presentState))
-            {
-                if(home.Track_rule.containsKey(timeCondition.rule.getid()))
-                {
-                    databaseDate=home.Track_rule.get(timeCondition);
-                    if(databaseDate.equals(currentDate))
-                    {
+        //End
 
-                        if(currentDate.getTime()-databaseDate.getTime()> 30 *60*1000)
-                        {
-                            notification.setTicker(" kusuma");
-                            notification.setWhen(System.currentTimeMillis());
-                            notification.setContentTitle(timeCondition.rule.getRulename());
-                            notification.setContentText(timeCondition.rule.getRuledesc());
-                            PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
-                            notification.setContentIntent(pintent);
-                            NotificationManager nm = (NotificationManager)context. getSystemService(NOTIFICATION_SERVICE);
-                            nm.notify(num++, notification.build());
-                        }
-
-                        databaseDate=currentDate;
-                        home.Track_rule.put(timeCondition.rule.getid(),databaseDate);
-
-                    }
-
-                }
-
-                else
-                {
-
-                    notification.setTicker(" kusuma");
-                    notification.setWhen(System.currentTimeMillis());
-                    notification.setContentTitle(timeCondition.rule.getRulename());
-                    notification.setContentText(timeCondition.rule.getRuledesc());
-                    PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
-                    notification.setContentIntent(pintent);
-                    NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
-                    nm.notify(num++, notification.build());
-                    home.Track_rule.put(timeCondition.rule.getid(),currentDate);
-                }
-
-            }
-
-        }
-
-
-        //for weather conditions
-        for(WeatherCondition weatherCondition: array_weather)
-        {
-            if(weatherCondition.isConditionSatisfied(presentState))
-            {
-                if(home.Track_rule.containsKey(weatherCondition.rule.getid()))
-                {
-                    databaseDate=home.Track_rule.get(weatherCondition.rule.getid());
-                    if(databaseDate.equals(currentDate))
-                    {
-
-                        if(currentDate.getTime()-databaseDate.getTime()> 30 *60*1000)
-                        {
-                            notification.setTicker(" kusuma");
-                            notification.setWhen(System.currentTimeMillis());
-                            notification.setContentTitle(weatherCondition.rule.getRulename());
-                            notification.setContentText(weatherCondition.rule.getRuledesc());
-                            PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
-                            notification.setContentIntent(pintent);
-                            NotificationManager nm = (NotificationManager)context. getSystemService(NOTIFICATION_SERVICE);
-                            nm.notify(num++, notification.build());
-
-
-                        }
-                        databaseDate=currentDate;
-                        home.Track_rule.put(weatherCondition.rule.getid(),databaseDate);
-
-                    }
-
-                }
-
-                else
-                {
-
-                    notification.setTicker(" kusuma");
-                    notification.setWhen(System.currentTimeMillis());
-                    notification.setContentTitle(weatherCondition.rule.getRulename());
-                    notification.setContentText(weatherCondition.rule.getRuledesc());
-                    PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
-                    notification.setContentIntent(pintent);
-                    NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
-                    nm.notify(num++, notification.build());
-                    home.Track_rule.put(weatherCondition.rule.getid(),currentDate);
-                }
-
-            }
-
-        }
-        //end
         return locationGps;
     }
 
@@ -308,7 +213,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
 
     public void onLocationChanged(Location loc) {
 
-      //  Intent broadcastintent=new Intent("com.example.location");
+      //  Intent broadcastintent=new Intent("com.example.activity_home_fab_location_selection");
         float_longitude=(float)loc.getLongitude();
         float_latitude=(float)loc.getLatitude();
         locationGps=new LocationGps(float_longitude,float_latitude);

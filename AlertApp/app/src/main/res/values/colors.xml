@@ -10,5 +10,10 @@
     <color name="red">#FF0000</color>
     <color name="lightgreen">#45B39D</color>
     <color name="orange">#FF5733</color>
-
+    <color name="violet">#A477A6</color>
+    <color name="lightblue">#77A3A6</color>
+    <color name="lightorange">#BDA08D</color>
+    <color name="blue">#68a0ad</color>
+    <color name="lightviolet">#E2DBE3</color>
+    <color name="cement">#38343C</color>
 </resources>

@@ -9,7 +9,13 @@ import java.text.ParseException;
 public abstract class Basecondition {
 
    public abstract boolean isConditionSatisfied(CurrentState cs) throws ParseException;
+   //TODO: Add a comment
    public int conditionId;
-   public Rule rule=new Rule();
+
+   public  Basecondition()
+   {
+
+   }
+
 
 }

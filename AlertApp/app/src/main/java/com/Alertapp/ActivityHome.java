@@ -23,7 +23,7 @@ import java.util.HashMap;
  * Created by kusumasri on 2/5/17.
  */
 
-public class HomePage extends AppCompatActivity {
+public class ActivityHome extends AppCompatActivity {
 
 
     // TODO: dont have to initialize to blank . Its blank by default in java
@@ -46,7 +46,7 @@ public class HomePage extends AppCompatActivity {
     public String cityName="";
     public float temperature;
     public DataStorage data =new DataStorage(this);
-    public  TextView tv_weather,tv_city,tv_name;
+    public  TextView tv_weather,tv_city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,19 +55,17 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         // TODO: extras should never be null so dont add the if condition
-        if (extras != null) {
-            name = extras.getString("name");
-        }
+
         scheduleAlarm();
-        String hello = "hello " + name;
+
         // TODO: textview variable should be prefixed with "tv_".
         // TODO: no need to create another variable hello here. Use it directly in setText
-        tv_name = (TextView) findViewById(R.id.hellou);
-        tv_name.setText(hello);
+
         tv_weather=(TextView)findViewById(R.id.tvweather);
         tv_city=(TextView)findViewById(R.id.tvcity);
         addRulestoListview();
         registerReceiver(uiUpdated, new IntentFilter("LOCATION_UPDATED"));
+
     }
 
 
@@ -91,7 +89,7 @@ public class HomePage extends AppCompatActivity {
 
             temperature=intent.getFloatExtra("temperature",1);
             cityName=intent.getExtras().getString("city");
-            tv_weather.setText(Float.toString(temperature));
+            tv_weather.setText(Float.toString(temperature)+"\u2109");
             tv_city.setText(cityName);
 
         }
@@ -116,8 +114,10 @@ public class HomePage extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Clicked product id" + view.getTag(), Toast.LENGTH_LONG).show();
                     //delete item from database
                     //     Rule obj=(Rule)adapter.getItem(position);
-                    Rule r1=(Rule)parent.getItemAtPosition(position);
-                    data.deleterule(r1.getid());
+                   /* Rule r1=(Rule)parent.getItemAtPosition(position);
+                    data.deleterule(r1.getid());*/
+                    Rule rule=(Rule)parent.getAdapter().getItem(position);
+                    data.deleterule(rule);
                     arlist.remove(position);
                     // TODO: Why create adaptor again and also why setAdapter again ?
                     adapter = new CustomAdapter(getApplicationContext(),arlist);
@@ -171,7 +171,7 @@ public class HomePage extends AppCompatActivity {
 
     public void fabClick(View view)
     {
-        Intent intent = new Intent(this, Addrule.class);
+        Intent intent = new Intent(this, ActivityAddrule.class);
         startActivityForResult(intent,1);
     }
 

@@ -10,14 +10,14 @@ import android.util.Log;
 public class Locationcondition extends Basecondition {
 
     public String location="";
-    public int id;
+
 
     public int getId() {
-        return id;
+        return conditionId;
     }
 
     public void setId(int id) {
-        this.id = id;
+        this.conditionId = id;
     }
 
     @Override
@@ -41,9 +41,6 @@ public class Locationcondition extends Basecondition {
 
     }
 
-    public void setruleid(int ruleid)
-    {
-        rule.id=ruleid;
-    }
+
 
 }

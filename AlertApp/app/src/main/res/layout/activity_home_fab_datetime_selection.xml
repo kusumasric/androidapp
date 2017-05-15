@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/lightgreen"
+    android:background="@color/blue"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -12,9 +12,10 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:text="Pick a date"
             android:layout_marginRight="5dp"
+            android:textColor="@color/white"
             android:layout_height="wrap_content" />
 
         <EditText
@@ -35,8 +36,9 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:text="Pick a Time"
+            android:textColor="@color/white"
             android:layout_marginRight="5dp"
             android:layout_height="wrap_content" />
 
@@ -47,6 +49,29 @@
             android:background="@color/grey"
             android:id="@+id/et_Time"
             android:focusable="false"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        android:layout_height="wrap_content">
+
+        <TextView
+
+            android:text="Rule Description"
+            android:layout_width="100dp"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:id="@+id/et_ruledesc"
+            android:width="200dp"
+            android:background="@color/grey"
+            android:height="100dp"
             android:layout_height="wrap_content" />
 
     </LinearLayout>

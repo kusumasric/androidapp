@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class DataStorage extends SQLiteOpenHelper {
 
-    public  static final int dbVersion=15;
+    public  static final int dbVersion=18;
 
     public DataStorage(Context context)
     {
@@ -46,14 +46,15 @@ public class DataStorage extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public void addRule(Rule rule)
+    public Long addRule(Rule rule)
     {
         ContentValues val=new ContentValues();
         val.put("rulename",rule.getRulename());
         val.put("ruledes",rule.getRuledesc());
         SQLiteDatabase db=getWritableDatabase();
-        db.insert("rules",null,val);
+        Long id=db.insert("rules",null,val);
         db.close();
+        return id;
     }
 
     public void addrow(User User)
@@ -67,25 +68,12 @@ public class DataStorage extends SQLiteOpenHelper {
     }
 
     //To add weather condition
-    public void addweather(WeatherCondition wc,String rulename)
+    public void addweather(WeatherCondition wc,Rule rule)
     {
+        Long id=addRule(rule);
         SQLiteDatabase db=getWritableDatabase();
-        String query="SELECT id FROM rules WHERE rulename =\""+rulename+"\";";
-        Cursor c;
-        int id=0;
-        c = db.rawQuery(query,null);
-        if(c!=null){
-            if  (c.moveToFirst()) {
-                do {
-                    id=c.getInt(c.getColumnIndex("id"));
-
-                }while (c.moveToNext());
-            }
-        }
-
-        wc.rule.id=id;
         ContentValues val=new ContentValues();
-        val.put("ruleid",wc.rule.getid());
+        val.put("ruleid",id);
         val.put("mintemp",wc.getMintemp());
         val.put("maxtemp",wc.getMaxtemp());
         db.insert("weathercondition",null,val);
@@ -94,51 +82,25 @@ public class DataStorage extends SQLiteOpenHelper {
     }
 
     //To add locationcondition
-    public void addlocation(Locationcondition lc,String rulename)
+    public void addlocation(Locationcondition lc,Rule rule)
     {
+        Long id=addRule(rule);
         SQLiteDatabase db=getWritableDatabase();
-        String query="SELECT id FROM rules WHERE rulename =\""+rulename+"\";";
-        Cursor c;
-        int id=0;
-        c = db.rawQuery(query,null);
-        if(c!=null){
-            if  (c.moveToFirst()) {
-                do {
-                    id=c.getInt(c.getColumnIndex("id"));
-
-                }while (c.moveToNext());
-            }
-        }
-
-        lc.rule.id=id;
         ContentValues val=new ContentValues();
-        val.put("ruleid",lc.rule.getid());
+        val.put("ruleid",id);
         val.put("location",lc.getLocation());
         db.insert("locationcondition",null,val);
         db.close();
 
     }
 
-    //To add datetime condition
-    public void adddatetime(Timecondition tc,String rulename)
+    //To add activity_home_fab_datetime_selection condition
+    public void adddatetime(Timecondition tc,Rule rule)
     {
+        Long id=addRule(rule);
         SQLiteDatabase db=getWritableDatabase();
-        String query="SELECT id FROM rules WHERE rulename =\""+rulename+"\";";
-        Cursor c;
-        int id=0;
-        c = db.rawQuery(query,null);
-        if(c!=null){
-            if  (c.moveToFirst()) {
-                do {
-                    id=c.getInt(c.getColumnIndex("id"));
-
-                }while (c.moveToNext());
-            }
-        }
-
-        tc.rule.id=id;
         ContentValues val=new ContentValues();
-        val.put("ruleid",tc.rule.getid());
+        val.put("ruleid",id);
         val.put("date",tc.getDate());
         val.put("time",tc.getTime());
         db.insert("datetimecondition",null,val);
@@ -151,23 +113,23 @@ public class DataStorage extends SQLiteOpenHelper {
     {
         SQLiteDatabase db=getWritableDatabase();
         db.execSQL("DELETE FROM weathercondition WHERE  ruleid=\""+id+"\";");
-        deleterule(id);
+
     }
 
-    //To delete location
+    //To delete activity_home_fab_location_selection
     public void deletelocation(int id)
     {
         SQLiteDatabase db=getWritableDatabase();
         db.execSQL("DELETE FROM locationcondition WHERE  ruleid=\""+id+"\";");
-        deleterule(id);
+
     }
 
-    //To delete location
+    //To delete activity_home_fab_location_selection
     public void deletetime(int id)
     {
         SQLiteDatabase db=getWritableDatabase();
         db.execSQL("DELETE FROM datetimecondition WHERE  ruleid=\""+id+"\";");
-        deleterule(id);
+
     }
 
     //To delete User
@@ -197,43 +159,18 @@ public class DataStorage extends SQLiteOpenHelper {
     //To get all the rules
     public ArrayList<Rule> getrules()
     {
-        ArrayList<Rule> arrayrules=new ArrayList<>();
-        SQLiteDatabase db=getWritableDatabase();
-        String selectQuery = "SELECT  * FROM  rules;";
-        try {
-
-            Cursor cursor = db.rawQuery(selectQuery, null);
-            try {
-
-                if (cursor.moveToFirst()) {
-                    do {
-                        Rule obj = new Rule();
-                        obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
-                        obj.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
-                        obj.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
-                      arrayrules.add(obj);
-                    } while (cursor.moveToNext());
-                }
-            }finally {
-                try {
-                    cursor.close();
-                } catch (Exception ignore) {}
-            }
-
-        } finally {
-            try {
-                db.close();
-            } catch (Exception ignore) {
-            }
-        }
-        return arrayrules;
+        ArrayList<Rule> allarrayrules=new ArrayList<>();
+        allarrayrules.addAll(getlocationcondition());
+        allarrayrules.addAll(gettimecondition());
+        allarrayrules.addAll(getweathercondition());
+        return allarrayrules;
     }
 
 
     //To get all weather conditions
-    public ArrayList<WeatherCondition> getweathercondition()
+    public ArrayList<Rule> getweathercondition()
     {
-        ArrayList<WeatherCondition> arrayweather=new ArrayList<>();
+        ArrayList<Rule> arrayweather=new ArrayList<>();
         SQLiteDatabase db=getWritableDatabase();
         String selectQuery = "SELECT  weathercondition.id,weathercondition.ruleid,weathercondition.mintemp,weathercondition.maxtemp,rules.rulename,rules.ruledes" +
                 " FROM  weathercondition JOIN rules ON rules.id=weathercondition.ruleid;";
@@ -244,14 +181,15 @@ public class DataStorage extends SQLiteOpenHelper {
 
                 if (cursor.moveToFirst()) {
                     do {
-                        WeatherCondition obj = new WeatherCondition();
-                        obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
-                        obj.setMintemp(cursor.getInt(cursor.getColumnIndex("mintemp")));
-                        obj.setMaxtemp(cursor.getInt(cursor.getColumnIndex("maxtemp")));
-                        obj.setruleid(cursor.getInt(cursor.getColumnIndex("ruleid")));
-                        obj.rule.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
-                        obj.rule.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
-                        arrayweather.add(obj);
+                         Rule obj = new Rule();
+                         WeatherCondition wcobj=new WeatherCondition();
+                         obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
+                         obj.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
+                         obj.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
+                         wcobj.setMintemp(cursor.getInt(cursor.getColumnIndex("mintemp")));
+                         wcobj.setMaxtemp(cursor.getInt(cursor.getColumnIndex("maxtemp")));
+                         obj.setBaseconditionobj(wcobj);
+                         arrayweather.add(obj);
                     } while (cursor.moveToNext());
                 }
             } finally {
@@ -266,9 +204,9 @@ public class DataStorage extends SQLiteOpenHelper {
     }
 
     //To get all locationconditions
-    public ArrayList<Locationcondition> getlocationcondition()
+    public ArrayList<Rule> getlocationcondition()
     {
-        ArrayList<Locationcondition> arraylocation=new ArrayList<>();
+        ArrayList<Rule> arraylocation=new ArrayList<>();
         SQLiteDatabase db=getWritableDatabase();
         String selectQuery = "SELECT  locationcondition.id,locationcondition.ruleid,locationcondition.location,rules.rulename,rules.ruledes " +
                 "FROM locationcondition JOIN rules ON rules.id=locationcondition.ruleid;";
@@ -279,13 +217,13 @@ public class DataStorage extends SQLiteOpenHelper {
 
                 if (cursor.moveToFirst()) {
                     do {
-
-                        Locationcondition obj = new Locationcondition();
-                        obj.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                        obj.setLocation(cursor.getString(cursor.getColumnIndex("location")));
-                        obj.rule.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
-                        obj.rule.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
-                        obj.setruleid(cursor.getInt(cursor.getColumnIndex("ruleid")));
+                        Rule obj=new Rule();
+                        Locationcondition locobj = new Locationcondition();
+                        obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
+                        obj.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
+                        obj.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
+                        locobj.setLocation(cursor.getString(cursor.getColumnIndex("location")));
+                        obj.setBaseconditionobj(locobj);
                         arraylocation.add(obj);
                     } while (cursor.moveToNext());
                 }
@@ -302,9 +240,9 @@ public class DataStorage extends SQLiteOpenHelper {
 
 
     //To get all datetimecondition
-    public ArrayList<Timecondition> gettimecondition()
+    public ArrayList<Rule> gettimecondition()
     {
-        ArrayList<Timecondition> arraytime=new ArrayList<>();
+        ArrayList<Rule> arraytime=new ArrayList<>();
         SQLiteDatabase db=getWritableDatabase();
         String selectQuery = "SELECT  datetimecondition.id,datetimecondition.ruleid,datetimecondition.date,datetimecondition.time,rules.rulename,rules.ruledes" +
                 " FROM  datetimecondition JOIN rules ON rules.id=datetimecondition.ruleid;";
@@ -315,13 +253,14 @@ public class DataStorage extends SQLiteOpenHelper {
 
                 if (cursor.moveToFirst()) {
                     do {
-                        Timecondition obj = new Timecondition();
-                        obj.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                        obj.setTime(cursor.getString(cursor.getColumnIndex("time")));
-                        obj.setDate(cursor.getString(cursor.getColumnIndex("date")));
-                        obj.rule.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
-                        obj.rule.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
-                        obj.setruleid(cursor.getInt(cursor.getColumnIndex("ruleid")));
+                        Rule obj=new Rule();
+                        Timecondition timeobj = new Timecondition();
+                        obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
+                        obj.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
+                        obj.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
+                        timeobj.setTime(cursor.getString(cursor.getColumnIndex("time")));
+                        timeobj.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                        obj.setBaseconditionobj(timeobj);
                         arraytime.add(obj);
                     } while (cursor.moveToNext());
                 }
@@ -338,39 +277,39 @@ public class DataStorage extends SQLiteOpenHelper {
 
 
     //To delete rules
-    public void deleterule(int id)
+    public void deleterule(Rule rule)
     {
         SQLiteDatabase db=getWritableDatabase();
-        //String string =String.valueOf(id);
-        db.execSQL("DELETE FROM rules WHERE  id=\""+id+"\";");
-        Cursor c=db.rawQuery("SELECT id FROM weathercondition WHERE ruleid=\""+id+"\";",null);
+
+        db.execSQL("DELETE FROM rules WHERE  rulename=\""+rule.getRulename()+"\";");
+        Cursor c=db.rawQuery("SELECT rules.id FROM weathercondition JOIN rules WHERE rules.rulename=\""+rule.getRulename()+"\";",null);
         if (c != null ) {
             if  (c.moveToFirst()) {
                 do {
 
-                    db.execSQL("DELETE FROM weathercondition WHERE ruleid=\""+id+"\";");
+                    db.execSQL("DELETE FROM weathercondition WHERE ruleid=\""+c.getInt(c.getColumnIndex("id"))+"\";");
 
                 }while (c.moveToNext());
             }
         }
-        c=db.rawQuery("SELECT id FROM locationcondition WHERE ruleid=\""+id+"\";",null);
+        c=db.rawQuery("SELECT rules.id FROM locationcondition JOIN rules WHERE rules.rulename=\""+rule.getRulename()+"\";",null);
         if (c != null ) {
             if  (c.moveToFirst()) {
                 do {
 
-                    db.execSQL("DELETE FROM locationcondition WHERE ruleid=\""+id+"\";");
+                    db.execSQL("DELETE FROM locationcondition WHERE ruleid=\""+c.getInt(c.getColumnIndex("id"))+"\";");
 
                 }while (c.moveToNext());
             }
         }
 
 
-        c=db.rawQuery("SELECT id FROM datetimecondition WHERE ruleid=\""+id+"\";",null);
+        c=db.rawQuery("SELECT rules.id FROM datetimecondition JOIN rules WHERE rules.rulename=\""+rule.getRulename()+"\";",null);
         if (c != null ) {
             if  (c.moveToFirst()) {
                 do {
 
-                    db.execSQL("DELETE FROM  datetimecondition WHERE ruleid=\""+id+"\";");
+                    db.execSQL("DELETE FROM  datetimecondition WHERE ruleid=\""+c.getInt(c.getColumnIndex("id"))+"\";");
 
                 }while (c.moveToNext());
             }
