@@ -3,56 +3,33 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/blue"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:padding="5dp"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
+        <DatePicker
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:datePickerMode="spinner"
+            android:calendarViewShown="false"
+            android:id="@+id/datepicker"
+            android:layout_gravity="center"
+            android:layout_weight="1">
+        </DatePicker>
 
-        <TextView
-            android:layout_width="100dp"
-            android:text="Pick a date"
-            android:layout_marginRight="5dp"
-            android:textColor="@color/white"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:layout_width="150dp"
-            android:text=""
-            android:background="@color/grey"
-            android:padding="5dp"
-            android:id="@+id/et_Date"
-            android:layout_margin="5dp"
-            android:focusable="false"
-            android:layout_height="wrap_content" />
+        <TimePicker
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:timePickerMode="spinner"
+            android:layout_gravity="center"
+            android:id="@+id/timepicker"
+            android:layout_weight="1">
+        </TimePicker>
     </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:orientation="horizontal"
-        android:padding="5dp"
-        android:layout_height="wrap_content">
-
-        <TextView
-            android:layout_width="100dp"
-            android:text="Pick a Time"
-            android:textColor="@color/white"
-            android:layout_marginRight="5dp"
-            android:layout_height="wrap_content" />
-
-        <EditText
-            android:layout_width="150dp"
-            android:padding="5dp"
-            android:layout_margin="5dp"
-            android:background="@color/grey"
-            android:id="@+id/et_Time"
-            android:focusable="false"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
     <LinearLayout
         android:layout_width="match_parent"
         android:orientation="horizontal"
@@ -75,6 +52,5 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
-
 
 </LinearLayout>

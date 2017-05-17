@@ -1,7 +1,5 @@
 package com.Alertapp;
 
-import java.text.ParseException;
-
 /**
  * Created by kusumasri on 4/1/17.
  */
@@ -19,6 +17,7 @@ public class Rule {
     }
 
     public Basecondition getBaseconditionobj() {
+
         return baseconditionobj;
     }
 

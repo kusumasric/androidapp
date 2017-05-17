@@ -14,7 +14,7 @@ import java.util.ArrayList;
 
 public class DataStorage extends SQLiteOpenHelper {
 
-    public  static final int dbVersion=18;
+    public  static final int dbVersion=20;
 
     public DataStorage(Context context)
     {
@@ -31,7 +31,7 @@ public class DataStorage extends SQLiteOpenHelper {
         db.execSQL(createquerryweather);
         String createquerrylocation="create table locationcondition(id INTEGER PRIMARY KEY AUTOINCREMENT, ruleid INTEGER NOT NULL, location TEXT);";
         db.execSQL(createquerrylocation);
-        String createquerrydate="create table datetimecondition(id INTEGER PRIMARY KEY AUTOINCREMENT, ruleid INTEGER NOT NULL, date TEXT,time TEXT);";
+        String createquerrydate="create table datetimecondition(id INTEGER PRIMARY KEY AUTOINCREMENT, ruleid INTEGER NOT NULL, datetime TEXT);";
         db.execSQL(createquerrydate);
 
     }
@@ -94,15 +94,14 @@ public class DataStorage extends SQLiteOpenHelper {
 
     }
 
-    //To add activity_home_fab_datetime_selection condition
+    //To add datetime condition
     public void adddatetime(Timecondition tc,Rule rule)
     {
         Long id=addRule(rule);
         SQLiteDatabase db=getWritableDatabase();
         ContentValues val=new ContentValues();
         val.put("ruleid",id);
-        val.put("date",tc.getDate());
-        val.put("time",tc.getTime());
+        val.put("datetime",tc.getDatetime());
         db.insert("datetimecondition",null,val);
         db.close();
 
@@ -116,20 +115,18 @@ public class DataStorage extends SQLiteOpenHelper {
 
     }
 
-    //To delete activity_home_fab_location_selection
+    //To delete deletelocation
     public void deletelocation(int id)
     {
         SQLiteDatabase db=getWritableDatabase();
         db.execSQL("DELETE FROM locationcondition WHERE  ruleid=\""+id+"\";");
-
     }
 
-    //To delete activity_home_fab_location_selection
+    //To delete deletetime
     public void deletetime(int id)
     {
         SQLiteDatabase db=getWritableDatabase();
         db.execSQL("DELETE FROM datetimecondition WHERE  ruleid=\""+id+"\";");
-
     }
 
     //To delete User
@@ -244,7 +241,7 @@ public class DataStorage extends SQLiteOpenHelper {
     {
         ArrayList<Rule> arraytime=new ArrayList<>();
         SQLiteDatabase db=getWritableDatabase();
-        String selectQuery = "SELECT  datetimecondition.id,datetimecondition.ruleid,datetimecondition.date,datetimecondition.time,rules.rulename,rules.ruledes" +
+        String selectQuery = "SELECT  datetimecondition.id,datetimecondition.ruleid,datetimecondition.datetime,rules.rulename,rules.ruledes" +
                 " FROM  datetimecondition JOIN rules ON rules.id=datetimecondition.ruleid;";
         try {
 
@@ -258,8 +255,7 @@ public class DataStorage extends SQLiteOpenHelper {
                         obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
                         obj.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
                         obj.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
-                        timeobj.setTime(cursor.getString(cursor.getColumnIndex("time")));
-                        timeobj.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                        timeobj.setDatetime(cursor.getString(cursor.getColumnIndex("datetime")));
                         obj.setBaseconditionobj(timeobj);
                         arraytime.add(obj);
                     } while (cursor.moveToNext());

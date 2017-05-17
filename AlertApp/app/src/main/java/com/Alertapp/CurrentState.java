@@ -1,8 +1,6 @@
 package com.Alertapp;
 
 import android.content.Context;
-
-import java.util.Calendar;
 import java.util.Date;
 
 /**

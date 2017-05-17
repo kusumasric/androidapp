@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,22 +26,18 @@ public class ActivityHome extends AppCompatActivity {
 
 
     // TODO: dont have to initialize to blank . Its blank by default in java
+    //Result- done
     public String name;
     public static final HashMap<Integer,Date> Track_rule=new HashMap<>();
     //TODO:use full names - here weatherlistview
-    public ListView Rulelist;//,wlist,tlist,llist;
+    //Result-deleted it
+    public ListView Rulelist;
     //TODO: name these as weatherConditions
-    /*
-    public ArrayList<WeatherCondition> weatherlist;
-    public ArrayList<Locationcondition> locationlist;
-    public ArrayList<Timecondition> timelist;
-    */
-    public ArrayList<Rule> arlist;
+   //Result-done
+    public ArrayList<Rule> listOfRules;
     public CustomAdapter adapter;
     //TODO: write formatting rules somewhere and the whole codebase should be consistent
-    /*public CustomAdapterWeather weather_adapter;
-    public CustomAdapterTime time_adapter;
-    public CustomAdapterLocation location_adapter;*/
+    //Result-done
     public String cityName="";
     public float temperature;
     public DataStorage data =new DataStorage(this);
@@ -51,24 +46,21 @@ public class ActivityHome extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        Bundle extras = getIntent().getExtras();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         // TODO: extras should never be null so dont add the if condition
-
+        //Result -no extras
         scheduleAlarm();
-
         // TODO: textview variable should be prefixed with "tv_".
         // TODO: no need to create another variable hello here. Use it directly in setText
-
+        //Result-done above
         tv_weather=(TextView)findViewById(R.id.tvweather);
         tv_city=(TextView)findViewById(R.id.tvcity);
         addRulestoListview();
         registerReceiver(uiUpdated, new IntentFilter("LOCATION_UPDATED"));
 
     }
-
-
 
     public void scheduleAlarm() {
         Intent intent = new Intent(getApplicationContext(), ReceiverStartService.class);
@@ -80,30 +72,29 @@ public class ActivityHome extends AppCompatActivity {
                 1*60*1000, pIntent);
     }
 
-
     private BroadcastReceiver uiUpdated= new BroadcastReceiver() {
 
         // TODO: name the intent variable better
+        //Result-done
         @Override
-        public void onReceive(Context context, Intent intent) {
+        public void onReceive(Context context, Intent receiverIntent) {
 
-            temperature=intent.getFloatExtra("temperature",1);
-            cityName=intent.getExtras().getString("city");
+            temperature=receiverIntent.getFloatExtra("temperature",1);
+            cityName=receiverIntent.getExtras().getString("city");
             tv_weather.setText(Float.toString(temperature)+"\u2109");
             tv_city.setText(cityName);
 
         }
     };
 
-
     public void addRulestoListview()
     {
         Rulelist=(ListView)findViewById(R.id.listview);
-        arlist=data.getrules();
-
-        // TODO: rename arlist to something better
-        if(arlist.size()>0) {
-            adapter = new CustomAdapter(getApplicationContext(), arlist);
+        listOfRules=data.getrules();
+        // TODO: rename arrlist to something better
+        //Result-done
+        if(listOfRules.size()>0) {
+            adapter = new CustomAdapter(getApplicationContext(), listOfRules);
             Rulelist.setAdapter(adapter);
             Rulelist.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
@@ -112,15 +103,11 @@ public class ActivityHome extends AppCompatActivity {
                                                int position, long id) {
 
                     Toast.makeText(getApplicationContext(), "Clicked product id" + view.getTag(), Toast.LENGTH_LONG).show();
-                    //delete item from database
-                    //     Rule obj=(Rule)adapter.getItem(position);
-                   /* Rule r1=(Rule)parent.getItemAtPosition(position);
-                    data.deleterule(r1.getid());*/
                     Rule rule=(Rule)parent.getAdapter().getItem(position);
                     data.deleterule(rule);
-                    arlist.remove(position);
+                    listOfRules.remove(position);
                     // TODO: Why create adaptor again and also why setAdapter again ?
-                    adapter = new CustomAdapter(getApplicationContext(),arlist);
+                    adapter = new CustomAdapter(getApplicationContext(),listOfRules);
                     Rulelist.setAdapter(adapter);
                     return false;
                 }
@@ -131,25 +118,12 @@ public class ActivityHome extends AppCompatActivity {
     }
 
     // TODO: Remove default implementations
-    @Override
-    protected void onStart() {
-        super.onStart();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-    }
+    //Result-done
 
     @Override
     protected void onResume() {
         addRulestoListview();
         super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
     }
 
     @Override
@@ -162,11 +136,6 @@ public class ActivityHome extends AppCompatActivity {
             e.printStackTrace();
         }
         super.onStop();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
     }
 
     public void fabClick(View view)

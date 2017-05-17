@@ -1,6 +1,5 @@
 package com.Alertapp;
 
-import android.provider.Settings;
 import android.util.Log;
 
 /**
@@ -13,10 +12,12 @@ public class Locationcondition extends Basecondition {
 
 
     public int getId() {
+
         return conditionId;
     }
 
     public void setId(int id) {
+
         this.conditionId = id;
     }
 
@@ -33,6 +34,7 @@ public class Locationcondition extends Basecondition {
     }
 
     public void setLocation(String location) {
+
         this.location = location;
     }
 
@@ -40,7 +42,5 @@ public class Locationcondition extends Basecondition {
     {
 
     }
-
-
 
 }

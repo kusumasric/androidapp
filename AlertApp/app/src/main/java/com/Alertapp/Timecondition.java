@@ -2,7 +2,6 @@ package com.Alertapp;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -12,11 +11,10 @@ import java.util.Date;
 public class Timecondition extends Basecondition {
 
 
-    public String time,date;
-
+    public String datetime;
     public Date date1=new Date();
     public Date currentDate=new Date();
-    public SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy-hh:mm");
+    public SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd-HH:mm");
     public boolean result=false;
     public int getId() {
         return conditionId;
@@ -29,7 +27,7 @@ public class Timecondition extends Basecondition {
     public boolean isConditionSatisfied(CurrentState cs)  {
 
         try {
-            date1=formatter.parse(date+"-"+time);
+            date1=dateFormat.parse(datetime);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -42,23 +40,12 @@ public class Timecondition extends Basecondition {
        return result;
     }
 
-    public String getTime() {
-
-        return time;
+    public String getDatetime() {
+        return datetime;
     }
 
-    public void setTime(String time) {
-
-        this.time = time;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
-
-        this.date = date;
+    public void setDatetime(String datetime) {
+        this.datetime = datetime;
     }
 
     public Timecondition()

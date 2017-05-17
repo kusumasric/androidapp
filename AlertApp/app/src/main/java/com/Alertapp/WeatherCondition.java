@@ -9,15 +9,10 @@ public class WeatherCondition  extends Basecondition{
 
     public int minTemp, maxTemp;
 
-
     @Override
     public boolean isConditionSatisfied(CurrentState cs) {
-        float temp=cs.getCurrentweather();
-        int  minval=Float.compare(temp,minTemp);
-        int maxval=Float.compare(maxTemp,temp);
-        if(minval>0 && maxval >0)
-                return true;
-        return false;
+        float currentTemperature=cs.getCurrentweather();
+        return minTemp < currentTemperature && currentTemperature < maxTemp;
     }
 
 
@@ -44,6 +39,5 @@ public class WeatherCondition  extends Basecondition{
     public void setId(int id) {
         this.conditionId = id;
     }
-
 
 }

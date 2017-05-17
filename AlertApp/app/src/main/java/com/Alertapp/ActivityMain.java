@@ -40,6 +40,7 @@ public class ActivityMain extends AppCompatActivity {
         else
         {
             //TODO:put the below code in a function and use it in both place
+            //Result-done
             LoginErrorMessage();
         }
     }
@@ -53,14 +54,11 @@ public class ActivityMain extends AppCompatActivity {
         if(res)
         {
             Intent intent = new Intent(getApplicationContext(), ActivityHome.class);
-
             startActivity(intent);
-
         }
         else
         {
             LoginErrorMessage();
-
         }
     }
 
@@ -81,6 +79,6 @@ public class ActivityMain extends AppCompatActivity {
     }
 
     //TODO: below functions are un-necessary
-
+    //Result-done
 
 }

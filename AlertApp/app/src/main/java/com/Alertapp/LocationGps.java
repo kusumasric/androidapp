@@ -20,14 +20,17 @@ public class LocationGps {
     }
 
     public float getLongitude() {
+
         return longitude;
     }
 
     public void setLongitude(float longitude) {
+
         this.longitude = longitude;
     }
 
     public float getLatitude() {
+
         return latitude;
     }
 
