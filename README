@@ -6,15 +6,18 @@ Application also has Sign in and Sign up pages for the users to log in and store
 
 Features Implemented:-
 ---------------------
-1)Signup/SignIn page
-2)User Authentication
-3)Getting location using GPS sensor
-4)Getting current temperature using Open Weather API using location
+1)Signup/SignIn page.
+2)Getting location using GPS sensor.
+3)Getting current temperature using Open Weather API using location.
+4)UI to generate rules using time, location, weather.
+5)Display notifications according to rules.
 
 Future Enhancements:-
 ------------------------------
-1)UI to generate rules using time,location,weather.
-2)Ability to store user settings in cloud.
-3)Improve the way the App Authenticates.
+
+1)Ability to store user settings in cloud.
+2)Improve the way the App Authenticates.
+
+
 
 
