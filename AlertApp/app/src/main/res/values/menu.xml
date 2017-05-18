@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="Conditionmenu">
-        <item>Select a value</item>
+        <item>Select a Value</item>
         <item>Time</item>
         <item>Location</item>
         <item>Weather</item>
