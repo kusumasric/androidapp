@@ -43,8 +43,8 @@ Application also has Sign in and Sign up pages for the users to log in and store
 		<p>
 		Sign up or Sign in page<br><br>
 		User can login to the application with their name and password.
-
 		</p>
+		
 		<p>
   		<img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/Signup.png" width="200" height="300"/>
 		</p>
