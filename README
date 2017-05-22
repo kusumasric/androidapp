@@ -1,6 +1,6 @@
 
 
-<img src="screens/Signup.png"/>
+<img src="/screens/Signup.png"/>
 The "Alert Application" provides user the ability to view the current temperature,set alerts depending upon weather,location,time.
 This application gathers location information using GPS sensor from a background service which runs continuously. Application interacts with Open weather API to get current weather information using that location information.
 
