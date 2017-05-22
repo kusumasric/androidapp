@@ -1,7 +1,6 @@
+
 ALERT APP
 =========
-    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/datetime.png"/>
-
 
 The “Alert Application” provides user the ability to view the current temperature,set alerts depending upon weather,location,time. This application gathers location information using GPS sensor from a background service which runs continuously. Application interacts with Open weather API to get current weather information using that location information. Application also has Sign in and Sign up pages for the users to log in and store information in android SQLite database.
 
@@ -12,7 +11,6 @@ The “Alert Application” provides user the ability to view the current temper
 3.  Display the configured Rules
 4.  Fire Notifications
 
-</p>
 <u>Enhanced Features</u>
 
 1.  Ability to store user settings in cloud.
@@ -59,3 +57,34 @@ The “Alert Application” provides user the ability to view the current temper
     Select the Location for a Rule.
 
     <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/location.png" width="200" height="300" />
+    
+    
+6.  To configure Rule based on Time
+    Select the Time from dropdown menu.
+    Select Time and date for a Rule.
+
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/datetime.png" width="200" height="300"/>
+
+	
+7.  To configure Rules based on Location
+    Select the Location from dropdown menu.
+    Select the Location for a Rule.
+    
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/location.png" width="200" height="300"/>
+
+8.  To configure Rules based on Weather
+    Select the minimum temperature and maximm temperature values
+    
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/weather.png" width="200" height="300"/>
+
+
+9.  Rules in List View
+    All the Rules are displayed below in a list.
+    
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/listrules.png" width="200" height="300"/>
+
+10. Notifications
+    Notifications gets displayed when specified condition gets satisfied.
+    
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/messages.png" width="200" height="300"/>
+
