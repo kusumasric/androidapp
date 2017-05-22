@@ -1,3 +1,4 @@
+```html
 <h1>ALERT APP</h1>
 <br>
 <p>
@@ -144,3 +145,4 @@ Application also has Sign in and Sign up pages for the users to log in and store
 		</p>
 	</li>
 </ol>
+```
