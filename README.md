@@ -37,19 +37,16 @@ Application also has Sign in and Sign up pages for the users to log in and store
   <li>Give the permission for using GPS, internet.</li>
 </ol> <br>
 <p><u>Usage </u></p> 
+<img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/Signup.png" width="200" height="300"/>
+		
 
 <ol>
-	<li>
-		<p>
-		Sign up or Sign in page<br><br>
-		User can login to the application with their name and password.
-		</p>
-		
-		<p>
-  		<img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/Signup.png" width="200" height="300"/>
-		</p>
-	</li>
-
+  <li>
+  <p> Sign up or Sign in page<br><br>User can login to the application with their name and password.</p>
+  <p>
+  <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/Signup.png" width="200" height="300"/>
+  </p>
+  </li>
 	<li>
 		<p>
 		Home page
