@@ -74,13 +74,16 @@ The “Alert Application” provides user the ability to view the current temper
 
 8.  To configure Rules based on Weather
     Select the minimum temperature and maximm temperature values
+    
     <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/weather.png" width="200" height="300"/>
 
 
 9.  Rules in List View
     All the Rules are displayed below in a list.
+    
     <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/listrules.png" width="200" height="300"/>
 
 10.  Notifications
     Notifications gets displayed when specified condition gets satisfied.
+    
     <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/messages.png" width="200" height="300"/>
