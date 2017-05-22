@@ -57,3 +57,30 @@ The “Alert Application” provides user the ability to view the current temper
     Select the Location for a Rule.
 
     <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/location.png" width="200" height="300" />
+    
+    
+6.  To configure Rule based on Time
+    Select the Time from dropdown menu.
+    Select Time and date for a Rule.
+
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/datetime.png" width="200" height="300"/>
+
+	
+7.  To configure Rules based on Location
+    Select the Location from dropdown menu.
+    Select the Location for a Rule.
+    
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/location.png" width="200" height="300"/>
+
+8.  To configure Rules based on Weather
+    Select the minimum temperature and maximm temperature values
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/weather.png" width="200" height="300"/>
+
+
+9.  Rules in List View
+    All the Rules are displayed below in a list.
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/listrules.png" width="200" height="300"/>
+
+10.  Notifications
+    Notifications gets displayed when specified condition gets satisfied.
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/messages.png" width="200" height="300"/>
