@@ -29,48 +29,31 @@ The “Alert Application” provides user the ability to view the current temper
 
 <u>Usage </u>
 
-<ol>
-<li>
-Sign up or Sign in page
-User can login to the application with their name and password.
+1.  Sign up or Sign in page
+    User can login to the application with their name and password.
 
-<img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/Signup.png" width="200" height="300" />
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/Signup.png" width="200" height="300" />
 
-</li>
-<li>
-Home page
-The current temperature and location are displayed at the top.
-Notification Rules are displayed below.
+2.  Home page
+    The current temperature and location are displayed at the top.
+    Notification Rules are displayed below.
 
-<img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/listrules.png" width="200" height="300" />
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/listrules.png" width="200" height="300" />
 
-</li>
-<li>
-Adding Rules
-On clicking the FAB at the bottom right corner you can add rules.
-To configure rules based on time, location or weather we can select a condition.
+3.  Adding Rules
+    On clicking the FAB at the bottom right corner you can add rules.
+    To configure rules based on time, location or weather we can select a condition.
 
-<img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/select%20condition.png" width="200" height="300" />
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/select%20condition.png" width="200" height="300" />
 
-</li>
-<li>
-To configure Rule based on Time
-Select the Time from dropdown menu.
-Select Time and date for a Rule.
+4.  To configure Rule based on Time
+    Select the Time from dropdown menu.
+    Select Time and date for a Rule.
 
-<img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/datetime.png" width="200" height="300" />
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/datetime.png" width="200" height="300" />
 
-</li>
-<li>
-To configure Rules based on Location
-Select the Location from dropdown menu.
-Select the Location for a Rule.
+5.  To configure Rules based on Location
+    Select the Location from dropdown menu.
+    Select the Location for a Rule.
 
-<img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/location.png" width="200" height="300" />
-
-</li>
-<li>
-To configure Rules based on Weather
-Select the minimum temperature and maximm temperature values
-
-**
+    <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/location.png" width="200" height="300" />
