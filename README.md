@@ -83,7 +83,8 @@ The “Alert Application” provides user the ability to view the current temper
     
     <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/listrules.png" width="200" height="300"/>
 
-10.  Notifications
+10. Notifications
     Notifications gets displayed when specified condition gets satisfied.
     
     <img src="https://raw.githubusercontent.com/kusumasric/androidapp/master/screens/messages.png" width="200" height="300"/>
+
