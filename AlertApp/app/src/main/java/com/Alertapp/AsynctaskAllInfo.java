@@ -31,6 +31,8 @@ import static android.content.Context.NOTIFICATION_SERVICE;
  * Created by kusumasri on 4/20/17.
  */
 
+
+//TODO: clean this file up
 public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps> implements LocationListener {
 
     public LocationManager locationManager;
@@ -39,7 +41,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
     public String cityName="";
     public float float_latitude,float_longitude;
     public List<Address> listAddresses = null;
-    //Notification parameters
+
     public ArrayList<Rule>  arrayallrules=new ArrayList<>();
     public DataStorage data;
     public ActivityHome home;
@@ -101,7 +103,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
         currentDate=presentState.getDate();
         arrayallrules=data.getrules();
         Intent[] intents = new Intent[1];
-        intents[0] = new Intent(context,ActivityMain.class);
+        intents[0] = new Intent(context,ActivityLogin.class);
         //Rules
         for(int i=0;i<arrayallrules.size();i++)
         {
@@ -188,7 +190,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
 
     @Override
     protected void onPostExecute(LocationGps locationGps) {
-        //These 3 lines are to test continous values
+
         String str="longitude"+ locationGps.getLongitude()+" "+"latitude"+ locationGps.getLatitude()+" "+"city"+cityName ;
         Toast toast = Toast.makeText(context,str,Toast.LENGTH_SHORT);
         toast.show();

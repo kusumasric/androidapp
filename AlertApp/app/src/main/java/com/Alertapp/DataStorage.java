@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * Created by kusumasri on 2/12/17.
  */
 
+//TODO: Rename this to DBAdaptor
 public class DataStorage extends SQLiteOpenHelper {
 
     public  static final int dbVersion=20;
@@ -143,7 +144,7 @@ public class DataStorage extends SQLiteOpenHelper {
         if (c != null ) {
             if  (c.moveToFirst()) {
                 do {
-                     String newpass=Utils.Convertpasstohash(password);
+                     String newpass=Utils.getHashOfPassword(password);
                      String pass= c.getString(c.getColumnIndex("password"));
                      if(newpass.equals(pass))
                            return true;

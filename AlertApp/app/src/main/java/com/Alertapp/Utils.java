@@ -21,7 +21,7 @@ public class Utils
     }
 
 
-    public static  String Convertpasstohash(String password) {
+    public static  String getHashOfPassword(String password) {
 
         String generatedPassword = null;
         try {

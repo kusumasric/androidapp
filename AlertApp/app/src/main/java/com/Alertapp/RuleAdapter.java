@@ -12,7 +12,7 @@ import java.util.ArrayList;
  * Created by kusumasri on 4/4/17.
  */
 
-public class CustomAdapter extends BaseAdapter {
+public class RuleAdapter extends BaseAdapter {
 
 
     private Context context;
@@ -23,7 +23,7 @@ public class CustomAdapter extends BaseAdapter {
         return rules.size();
     }
 
-    public CustomAdapter(Context context,ArrayList<Rule> rules) {
+    public RuleAdapter(Context context, ArrayList<Rule> rules) {
         this.rules = rules;
         this.context = context;
     }

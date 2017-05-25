@@ -6,6 +6,7 @@ import android.util.Log;
  * Created by kusumasri on 4/24/17.
  */
 
+//TODO: have constructor for all condition types
 public class Locationcondition extends Basecondition {
 
     public String location="";

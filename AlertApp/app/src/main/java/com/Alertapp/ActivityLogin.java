@@ -1,19 +1,15 @@
 package com.Alertapp;
 
-import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 
-// TODO: Follow naming format for activity classes and activity layout as per
-// http://stackoverflow.com/questions/5582079/layout-files-naming-conventions
-public class ActivityMain extends AppCompatActivity {
+public class ActivityLogin extends AppCompatActivity {
 
     public EditText et_Name,et_Pass,et_Conpass;
-    public Context context;
-    public DataStorage dbhandler = new DataStorage(this);
+    public DataStorage dbHandler = new DataStorage(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,10 +27,9 @@ public class ActivityMain extends AppCompatActivity {
         String confpass = et_Conpass.getText().toString();
         if(password.equals(confpass))
         {
-            String hashpass=" ";
-            hashpass=Utils.Convertpasstohash(password);
+            String hashpass=Utils.getHashOfPassword(password);
             User newuser = new User(et_Name.getText().toString(),hashpass.toString());
-            dbhandler.addrow(newuser);
+            dbHandler.addrow(newuser);
             startActivity(intent);
         }
         else
@@ -77,8 +72,5 @@ public class ActivityMain extends AppCompatActivity {
         dlgAlert.setCancelable(true);
         dlgAlert.show();
     }
-
-    //TODO: below functions are un-necessary
-    //Result-done
 
 }
