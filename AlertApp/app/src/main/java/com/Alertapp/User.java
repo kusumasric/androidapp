@@ -16,23 +16,7 @@ public class User {
         this.pass=pass;
 
     }
-    public void setid(int id)
-    {
-        this.id=id;
-    }
-    public void setuname(String uname)
-    {
-        this.uname=uname;
-    }
-    public void setpass(String pass)
-    {
-        this.pass=pass;
-    }
 
-    public int getid()
-    {
-        return id;
-    }
     public String getuname()
     {
         return uname;

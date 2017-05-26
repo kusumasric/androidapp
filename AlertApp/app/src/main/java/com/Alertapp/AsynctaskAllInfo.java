@@ -22,7 +22,6 @@ import net.aksingh.owmjapis.OpenWeatherMap;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -35,24 +34,21 @@ import static android.content.Context.NOTIFICATION_SERVICE;
 //TODO: clean this file up
 public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps> implements LocationListener {
 
-    public LocationManager locationManager;
+    private LocationManager locationManager;
     public LocationGps locationGps;
     public Context context;
     public String cityName="";
     public float float_latitude,float_longitude;
-    public List<Address> listAddresses = null;
-
+    public List<Address> listAddresses;
     public ArrayList<Rule>  arrayallrules=new ArrayList<>();
     public DataStorage data;
     public ActivityHome home;
     public Date currentDate=new Date();
-    public LocationGps loc=new LocationGps();
     public CurrentState presentState=new CurrentState();
-    public Calendar c = Calendar.getInstance();
     public float temp1=0;
     public Date databaseDate;
     public NotificationCompat.Builder notification;
-    private static int num = 1237;
+    private static int notificationNumber = 1237;
 
     @Override
     protected LocationGps doInBackground(Context...cont) {
@@ -124,7 +120,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
                                 PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
                                 notification.setContentIntent(pintent);
                                 NotificationManager nm = (NotificationManager)context. getSystemService(NOTIFICATION_SERVICE);
-                                nm.notify(num++, notification.build());
+                                nm.notify(notificationNumber++, notification.build());
                             }
 
                             databaseDate=currentDate;
@@ -140,7 +136,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
                         PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
                         notification.setContentIntent(pintent);
                         NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
-                        nm.notify(num++, notification.build());
+                        nm.notify(notificationNumber++, notification.build());
                         home.Track_rule.put(arrayallrules.get(i).getid(),currentDate);
                     }
 

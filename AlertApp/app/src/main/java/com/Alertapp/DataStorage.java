@@ -49,13 +49,28 @@ public class DataStorage extends SQLiteOpenHelper {
 
     public Long addRule(Rule rule)
     {
-        ContentValues val=new ContentValues();
-        val.put("rulename",rule.getRulename());
-        val.put("ruledes",rule.getRuledesc());
+        ContentValues ruleTableValues=new ContentValues();
+        ruleTableValues.put("rulename",rule.getRulename());
+        ruleTableValues.put("ruledes",rule.getRuledesc());
         SQLiteDatabase db=getWritableDatabase();
-        Long id=db.insert("rules",null,val);
+        Long ruleId=db.insert("rules",null,ruleTableValues);
+        ContentValues conditionTableValues=new ContentValues();
+        conditionTableValues.put("ruleid",ruleId);
+        if(rule.baseconditionobj instanceof Locationcondition ) {
+            conditionTableValues.put("location",((Locationcondition) rule.baseconditionobj).getLocation());
+            db.insert("locationcondition",null,conditionTableValues);
+        }
+        if(rule.baseconditionobj instanceof WeatherCondition) {
+            conditionTableValues.put("mintemp",((WeatherCondition) rule.baseconditionobj).getMintemp());
+            conditionTableValues.put("maxtemp",((WeatherCondition) rule.baseconditionobj).getMaxtemp());
+            db.insert("weathercondition",null,conditionTableValues);
+        }
+        if(rule.baseconditionobj instanceof Timecondition ) {
+            conditionTableValues.put("datetime",((Timecondition) rule.baseconditionobj).getDatetime());
+            db.insert("datetimecondition",null,conditionTableValues);
+        }
         db.close();
-        return id;
+        return ruleId;
     }
 
     public void addrow(User User)

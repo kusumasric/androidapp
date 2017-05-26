@@ -29,7 +29,7 @@ public class ActivityAddrule extends Activity  {
     private WeatherCondition weatherc=new WeatherCondition();
     private Locationcondition locationc=new Locationcondition();
     private Timecondition timeCondition = new Timecondition();
-
+    public Rule newRule;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd-HH:mm");
     public String location="";
     public Context context;
@@ -116,21 +116,24 @@ public class ActivityAddrule extends Activity  {
     {
         RuleName=et_RuleName.getText().toString();
         RuleDesc=et_RuleDesc.getText().toString();
-        Rule newRule;
+      //  Rule newRule;
         if(spinner_conditionmenu.getSelectedItemPosition()==1)
         {
             selectedDateTime.set(datepicker.getYear(),datepicker.getMonth(),datepicker.getDayOfMonth(),timepicker.getHour(),timepicker.getMinute());
             Date date = selectedDateTime.getTime();
             timeCondition.datetime=dateFormat.format(date);
-            newRule=new Rule(RuleName,RuleDesc, timeCondition);
-            dbhandler.adddatetime(timeCondition,newRule);
+            newRule = new Rule(RuleName, RuleDesc, timeCondition);
+
+          /*  newRule=new Rule(RuleName,RuleDesc, timeCondition);
+            dbhandler.adddatetime(timeCondition,newRule);*/
         }
 
         if(spinner_conditionmenu.getSelectedItemPosition()==2)
         {
             locationc.setLocation(location);
-            newRule=new Rule(RuleName,RuleDesc,locationc);
-            dbhandler.addlocation(locationc,newRule);
+            newRule.setBaseconditionobj(locationc);
+            /*newRule=new Rule(RuleName,RuleDesc,locationc);
+            dbhandler.addlocation(locationc,newRule);*/
         }
 
         if(spinner_conditionmenu.getSelectedItemPosition()==3)
@@ -139,10 +142,11 @@ public class ActivityAddrule extends Activity  {
             int maxTemp=Integer.parseInt(et_MaximumTemp.getText().toString());
             weatherc.setMintemp(minTemp);
             weatherc.setMaxtemp(maxTemp);
-            newRule=new Rule(RuleName,RuleDesc,weatherc);
-            dbhandler.addweather(weatherc,newRule);
+            newRule.setBaseconditionobj(weatherc);
+           /* newRule=new Rule(RuleName,RuleDesc,weatherc);
+            dbhandler.addweather(weatherc,newRule);*/
         }
-
+        dbhandler.addRule(newRule);
         super.onBackPressed();
     }
 

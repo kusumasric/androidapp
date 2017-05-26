@@ -24,11 +24,10 @@ import java.util.HashMap;
 public class ActivityHome extends AppCompatActivity {
 
     public static final HashMap<Integer,Date> Track_rule=new HashMap<>();
-    public ListView ruleListView;
+
     public ArrayList<Rule> rulesList;
     public RuleAdapter rulesAdapter;
-    public DataStorage dataStore =new DataStorage(this);
-    public  TextView tv_weather,tv_city;
+    public TextView tv_weather,tv_city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +68,8 @@ public class ActivityHome extends AppCompatActivity {
 
     public void initializeRulesView()
     {
-        ruleListView =(ListView)findViewById(R.id.listview);
+        final ListView ruleListView =(ListView)findViewById(R.id.listview);
+        final DataStorage dataStore =new DataStorage(this);
         rulesList = dataStore.getrules();
         if(rulesList.size()>0) {
             rulesAdapter = new RuleAdapter(getApplicationContext(), rulesList);

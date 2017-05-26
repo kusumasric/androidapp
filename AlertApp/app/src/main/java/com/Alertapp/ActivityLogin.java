@@ -34,8 +34,6 @@ public class ActivityLogin extends AppCompatActivity {
         }
         else
         {
-            //TODO:put the below code in a function and use it in both place
-            //Result-done
             LoginErrorMessage();
         }
     }
