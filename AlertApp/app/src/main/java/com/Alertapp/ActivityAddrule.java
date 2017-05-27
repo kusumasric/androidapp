@@ -24,15 +24,15 @@ import java.util.Date;
 public class ActivityAddrule extends Activity  {
 
     private EditText et_RuleName,et_RuleDesc,et_MinimumTemp,et_MaximumTemp;
-    private String RuleName,RuleDesc;
+
     private DataStorage dbhandler=new DataStorage(this);
-    private WeatherCondition weatherc=new WeatherCondition();
-    private Locationcondition locationc=new Locationcondition();
+    private WeatherCondition weathercondition =new WeatherCondition();
+    private Locationcondition locationcondition =new Locationcondition();
     private Timecondition timeCondition = new Timecondition();
     public Rule newRule;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd-HH:mm");
     public String location="";
-    public Context context;
+
     Spinner spinner_conditionmenu;
     Calendar selectedDateTime =Calendar.getInstance();
     DatePicker datepicker;
@@ -44,7 +44,7 @@ public class ActivityAddrule extends Activity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_fab_addrule);
         et_RuleName=(EditText)findViewById(R.id.et_rulename);
-        context = getApplicationContext();
+        Context context = getApplicationContext();
         spinner_conditionmenu=(Spinner)findViewById(R.id.spinner_menu);
         ArrayAdapter<String> menuadapter= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.Conditionmenu));
         final ArrayAdapter<String> locationadapter= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.Locationitems));
@@ -114,37 +114,31 @@ public class ActivityAddrule extends Activity  {
 
     public void onclickadd(View view)
     {
-        RuleName=et_RuleName.getText().toString();
-        RuleDesc=et_RuleDesc.getText().toString();
-      //  Rule newRule;
+        String ruleName=et_RuleName.getText().toString();
+        String ruleDesc=et_RuleDesc.getText().toString();
+
         if(spinner_conditionmenu.getSelectedItemPosition()==1)
         {
             selectedDateTime.set(datepicker.getYear(),datepicker.getMonth(),datepicker.getDayOfMonth(),timepicker.getHour(),timepicker.getMinute());
             Date date = selectedDateTime.getTime();
             timeCondition.datetime=dateFormat.format(date);
-            newRule = new Rule(RuleName, RuleDesc, timeCondition);
-
-          /*  newRule=new Rule(RuleName,RuleDesc, timeCondition);
-            dbhandler.adddatetime(timeCondition,newRule);*/
+            newRule = new Rule(ruleName, ruleDesc, timeCondition);
         }
 
         if(spinner_conditionmenu.getSelectedItemPosition()==2)
         {
-            locationc.setLocation(location);
-            newRule.setBaseconditionobj(locationc);
-            /*newRule=new Rule(RuleName,RuleDesc,locationc);
-            dbhandler.addlocation(locationc,newRule);*/
+            locationcondition.location=location;
+            newRule=new Rule(ruleName,ruleDesc, locationcondition);
         }
 
         if(spinner_conditionmenu.getSelectedItemPosition()==3)
         {
             int minTemp=Integer.parseInt(et_MinimumTemp.getText().toString());
             int maxTemp=Integer.parseInt(et_MaximumTemp.getText().toString());
-            weatherc.setMintemp(minTemp);
-            weatherc.setMaxtemp(maxTemp);
-            newRule.setBaseconditionobj(weatherc);
-           /* newRule=new Rule(RuleName,RuleDesc,weatherc);
-            dbhandler.addweather(weatherc,newRule);*/
+            weathercondition.minTemp=minTemp;
+            weathercondition.maxTemp=maxTemp;
+            newRule=new Rule(ruleName,ruleDesc, weathercondition);
+
         }
         dbhandler.addRule(newRule);
         super.onBackPressed();

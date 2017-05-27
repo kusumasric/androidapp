@@ -104,43 +104,42 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
         for(int i=0;i<arrayallrules.size();i++)
         {
             try {
-                if(home.Track_rule.containsKey(arrayallrules.get(i).getid()))
-                {
-                    if(arrayallrules.get(i).baseconditionobj.isConditionSatisfied(presentState))
-                    {
-                        databaseDate=home.Track_rule.get(arrayallrules.get(i).getid());
-                        if(databaseDate.equals(currentDate))
-                        {
-                            if(databaseDate.getTime()-currentDate.getTime() > 30 )
-                            {
+                if(home.Track_rule.containsKey(arrayallrules.get(i).getid())) {
+                    if (arrayallrules.get(i).baseconditionobj.isConditionSatisfied(presentState)) {
+                        databaseDate = home.Track_rule.get(arrayallrules.get(i).getid());
+                        if (databaseDate.equals(currentDate)) {
+                            if (databaseDate.getTime() - currentDate.getTime() > 30) {
                                 notification.setTicker(" kusuma");
                                 notification.setWhen(System.currentTimeMillis());
                                 notification.setContentTitle(arrayallrules.get(i).getRulename());
                                 notification.setContentText(arrayallrules.get(i).getRuledesc());
                                 PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
                                 notification.setContentIntent(pintent);
-                                NotificationManager nm = (NotificationManager)context. getSystemService(NOTIFICATION_SERVICE);
+                                NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
                                 nm.notify(notificationNumber++, notification.build());
                             }
 
-                            databaseDate=currentDate;
-                            home.Track_rule.put(arrayallrules.get(i).getid(),databaseDate);
+                            databaseDate = currentDate;
+                            home.Track_rule.put(arrayallrules.get(i).getid(), databaseDate);
                         }
                     }
-                    else
-                    {
+                }
+                else
+                {
+                    if (arrayallrules.get(i).baseconditionobj.isConditionSatisfied(presentState)) {
                         notification.setTicker(" kusuma");
                         notification.setWhen(System.currentTimeMillis());
                         notification.setContentTitle(arrayallrules.get(i).getRulename());
                         notification.setContentText(arrayallrules.get(i).getRuledesc());
                         PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
                         notification.setContentIntent(pintent);
-                        NotificationManager nm = (NotificationManager)context.getSystemService(NOTIFICATION_SERVICE);
+                        NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
                         nm.notify(notificationNumber++, notification.build());
-                        home.Track_rule.put(arrayallrules.get(i).getid(),currentDate);
+                        home.Track_rule.put(arrayallrules.get(i).getid(), currentDate);
                     }
-
                 }
+
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
