@@ -37,21 +37,17 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
     private LocationManager locationManager;
     public LocationGps locationGps;
     public Context context;
-    public String cityName="";
     public float float_latitude,float_longitude;
     public List<Address> listAddresses;
-    public ArrayList<Rule>  arrayallrules=new ArrayList<>();
-    public DataStorage data;
-    public ActivityHome home;
     public Date currentDate=new Date();
     public CurrentState presentState=new CurrentState();
-    public float temp1=0;
-    public Date databaseDate;
-    public NotificationCompat.Builder notification;
     private static int notificationNumber = 1237;
 
     @Override
     protected LocationGps doInBackground(Context...cont) {
+        ArrayList<Rule>  arrayallrules = new ArrayList<>();
+        String cityName="";
+        float temp1=0;
         if (Looper.myLooper() == null)
         {
             Looper.prepare();
@@ -82,10 +78,10 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
             ex.printStackTrace();
         }
 
-        data=new DataStorage(context);
+        DataStorage data=new DataStorage(context);
         presentState.setCurrentlocation(cityName);
         presentState.setCurrentweather(temp1);
-        notification = new NotificationCompat.Builder(context);
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(context);
         notification.setAutoCancel(true);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             int color = 0x008000;
@@ -104,9 +100,9 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
         for(int i=0;i<arrayallrules.size();i++)
         {
             try {
-                if(home.Track_rule.containsKey(arrayallrules.get(i).getid())) {
+                if(ActivityHome.Track_rule.containsKey(arrayallrules.get(i).getid())) {
                     if (arrayallrules.get(i).baseconditionobj.isConditionSatisfied(presentState)) {
-                        databaseDate = home.Track_rule.get(arrayallrules.get(i).getid());
+                        Date databaseDate = ActivityHome.Track_rule.get(arrayallrules.get(i).getid());
                         if (databaseDate.equals(currentDate)) {
                             if (databaseDate.getTime() - currentDate.getTime() > 30) {
                                 notification.setTicker(" kusuma");
@@ -120,7 +116,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
                             }
 
                             databaseDate = currentDate;
-                            home.Track_rule.put(arrayallrules.get(i).getid(), databaseDate);
+                            ActivityHome.Track_rule.put(arrayallrules.get(i).getid(), databaseDate);
                         }
                     }
                 }
@@ -135,7 +131,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
                         notification.setContentIntent(pintent);
                         NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
                         nm.notify(notificationNumber++, notification.build());
-                        home.Track_rule.put(arrayallrules.get(i).getid(), currentDate);
+                        ActivityHome.Track_rule.put(arrayallrules.get(i).getid(), currentDate);
                     }
                 }
 
@@ -186,12 +182,12 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
     @Override
     protected void onPostExecute(LocationGps locationGps) {
 
-        String str="longitude"+ locationGps.getLongitude()+" "+"latitude"+ locationGps.getLatitude()+" "+"city"+cityName ;
+        String str="longitude"+ locationGps.getLongitude()+" "+"latitude"+ locationGps.getLatitude()+" "+"city"+ presentState.getCurrentlocation() ;
         Toast toast = Toast.makeText(context,str,Toast.LENGTH_SHORT);
         toast.show();
         Intent i = new Intent("LOCATION_UPDATED");
-        i.putExtra("city",cityName);
-        i.putExtra("temperature",temp1);
+        i.putExtra("city",presentState.getCurrentlocation());
+        i.putExtra("temperature",presentState.getCurrentweather());
         context.sendBroadcast(i);
         super.onPostExecute(locationGps);
     }

@@ -8,6 +8,16 @@ public class WeatherCondition  extends Basecondition{
 
 
     public int minTemp, maxTemp;
+    public WeatherCondition()
+    {
+
+    }
+
+    public WeatherCondition(int mint, int maxt)
+    {
+        minTemp=mint;
+        maxTemp=maxt;
+    }
 
     @Override
     public boolean isConditionSatisfied(CurrentState cs) {
@@ -15,21 +25,20 @@ public class WeatherCondition  extends Basecondition{
         return minTemp < currentTemperature && currentTemperature < maxTemp;
     }
 
-
-    public int getMintemp() {
-        return minTemp;
-    }
-
-    public void setMintemp(int minTemp) {
-        this.minTemp = minTemp;
-    }
-
-    public int getMaxtemp() {
+    public int getMaxTemp() {
         return maxTemp;
     }
 
-    public void setMaxtemp(int maxTemp) {
+    public void setMinTemp(int minTemp) {
+        this.minTemp = minTemp;
+    }
+
+    public void setMaxTemp(int maxTemp) {
         this.maxTemp = maxTemp;
+    }
+
+    public int getMinTemp() {
+        return minTemp;
     }
 
     public int getId() {

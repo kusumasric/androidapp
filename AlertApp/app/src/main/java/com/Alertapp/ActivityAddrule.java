@@ -26,12 +26,12 @@ public class ActivityAddrule extends Activity  {
     private EditText et_RuleName,et_RuleDesc,et_MinimumTemp,et_MaximumTemp;
 
     private DataStorage dbhandler=new DataStorage(this);
-    private WeatherCondition weathercondition =new WeatherCondition();
-    private Locationcondition locationcondition =new Locationcondition();
-    private Timecondition timeCondition = new Timecondition();
+    private WeatherCondition weathercondition;
+    private Locationcondition locationcondition;
+    private Timecondition timeCondition;
     public Rule newRule;
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd-HH:mm");
-    public String location="";
+    public String location;
 
     Spinner spinner_conditionmenu;
     Calendar selectedDateTime =Calendar.getInstance();
@@ -121,13 +121,13 @@ public class ActivityAddrule extends Activity  {
         {
             selectedDateTime.set(datepicker.getYear(),datepicker.getMonth(),datepicker.getDayOfMonth(),timepicker.getHour(),timepicker.getMinute());
             Date date = selectedDateTime.getTime();
-            timeCondition.datetime=dateFormat.format(date);
+            timeCondition= new Timecondition(date);
             newRule = new Rule(ruleName, ruleDesc, timeCondition);
         }
 
         if(spinner_conditionmenu.getSelectedItemPosition()==2)
         {
-            locationcondition.location=location;
+            locationcondition=new Locationcondition(location);
             newRule=new Rule(ruleName,ruleDesc, locationcondition);
         }
 
@@ -135,8 +135,7 @@ public class ActivityAddrule extends Activity  {
         {
             int minTemp=Integer.parseInt(et_MinimumTemp.getText().toString());
             int maxTemp=Integer.parseInt(et_MaximumTemp.getText().toString());
-            weathercondition.minTemp=minTemp;
-            weathercondition.maxTemp=maxTemp;
+            weathercondition=new WeatherCondition(minTemp,maxTemp);
             newRule=new Rule(ruleName,ruleDesc, weathercondition);
 
         }

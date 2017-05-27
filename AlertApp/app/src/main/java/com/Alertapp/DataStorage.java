@@ -47,7 +47,7 @@ public class DataStorage extends SQLiteOpenHelper {
         onCreate(db);
     }
 
-    public Long addRule(Rule rule)
+    public void addRule(Rule rule)
     {
         ContentValues ruleTableValues=new ContentValues();
         ruleTableValues.put("rulename",rule.getRulename());
@@ -61,8 +61,8 @@ public class DataStorage extends SQLiteOpenHelper {
             db.insert("locationcondition",null,conditionTableValues);
         }
         if(rule.baseconditionobj instanceof WeatherCondition) {
-            conditionTableValues.put("mintemp",((WeatherCondition) rule.baseconditionobj).getMintemp());
-            conditionTableValues.put("maxtemp",((WeatherCondition) rule.baseconditionobj).getMaxtemp());
+            conditionTableValues.put("mintemp",((WeatherCondition) rule.baseconditionobj).getMinTemp());
+            conditionTableValues.put("maxtemp",((WeatherCondition) rule.baseconditionobj).getMaxTemp());
             db.insert("weathercondition",null,conditionTableValues);
         }
         if(rule.baseconditionobj instanceof Timecondition ) {
@@ -70,7 +70,7 @@ public class DataStorage extends SQLiteOpenHelper {
             db.insert("datetimecondition",null,conditionTableValues);
         }
         db.close();
-        return ruleId;
+
     }
 
     public void addrow(User User)
@@ -83,74 +83,7 @@ public class DataStorage extends SQLiteOpenHelper {
         db.close();
     }
 
-    //To add weather condition
-    public void addweather(WeatherCondition wc,Rule rule)
-    {
-        Long id=addRule(rule);
-        SQLiteDatabase db=getWritableDatabase();
-        ContentValues val=new ContentValues();
-        val.put("ruleid",id);
-        val.put("mintemp",wc.getMintemp());
-        val.put("maxtemp",wc.getMaxtemp());
-        db.insert("weathercondition",null,val);
-        db.close();
 
-    }
-
-    //To add locationcondition
-    public void addlocation(Locationcondition lc,Rule rule)
-    {
-        Long id=addRule(rule);
-        SQLiteDatabase db=getWritableDatabase();
-        ContentValues val=new ContentValues();
-        val.put("ruleid",id);
-        val.put("location",lc.getLocation());
-        db.insert("locationcondition",null,val);
-        db.close();
-
-    }
-
-    //To add datetime condition
-    public void adddatetime(Timecondition tc,Rule rule)
-    {
-        Long id=addRule(rule);
-        SQLiteDatabase db=getWritableDatabase();
-        ContentValues val=new ContentValues();
-        val.put("ruleid",id);
-        val.put("datetime",tc.getDatetime());
-        db.insert("datetimecondition",null,val);
-        db.close();
-
-    }
-
-    //To delete weather
-    public void deleteweather(int id)
-    {
-        SQLiteDatabase db=getWritableDatabase();
-        db.execSQL("DELETE FROM weathercondition WHERE  ruleid=\""+id+"\";");
-
-    }
-
-    //To delete deletelocation
-    public void deletelocation(int id)
-    {
-        SQLiteDatabase db=getWritableDatabase();
-        db.execSQL("DELETE FROM locationcondition WHERE  ruleid=\""+id+"\";");
-    }
-
-    //To delete deletetime
-    public void deletetime(int id)
-    {
-        SQLiteDatabase db=getWritableDatabase();
-        db.execSQL("DELETE FROM datetimecondition WHERE  ruleid=\""+id+"\";");
-    }
-
-    //To delete User
-    public void deleteuser(String usern)
-    {
-        SQLiteDatabase db=getWritableDatabase();
-        db.execSQL("DELETE FROM authentication WHERE username =\""+usern+"\";");
-    }
 
     public boolean getpass(String uname,String password)
     {
@@ -199,8 +132,8 @@ public class DataStorage extends SQLiteOpenHelper {
                          obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
                          obj.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
                          obj.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
-                         wcobj.setMintemp(cursor.getInt(cursor.getColumnIndex("mintemp")));
-                         wcobj.setMaxtemp(cursor.getInt(cursor.getColumnIndex("maxtemp")));
+                         wcobj.setMinTemp(cursor.getInt(cursor.getColumnIndex("mintemp")));
+                         wcobj.setMaxTemp(cursor.getInt(cursor.getColumnIndex("maxtemp")));
                          obj.setBaseconditionobj(wcobj);
                          arrayweather.add(obj);
                     } while (cursor.moveToNext());

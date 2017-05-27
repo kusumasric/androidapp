@@ -23,6 +23,16 @@ public class Timecondition extends Basecondition {
         this.conditionId = id;
     }
 
+    public Timecondition()
+    {
+
+    }
+
+    public Timecondition(Date date)
+    {
+        date1=date;
+    }
+
     @Override
     public boolean isConditionSatisfied(CurrentState cs)  {
 
@@ -40,18 +50,13 @@ public class Timecondition extends Basecondition {
        return result;
     }
 
-    public String getDatetime() {
-        return datetime;
-    }
-
     public void setDatetime(String datetime) {
         this.datetime = datetime;
     }
 
-    public Timecondition()
+    public String getDatetime()
     {
-
-
+        return date1.toString();
     }
 
-}
+ }

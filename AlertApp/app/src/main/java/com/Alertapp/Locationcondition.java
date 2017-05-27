@@ -9,8 +9,17 @@ import android.util.Log;
 //TODO: have constructor for all condition types
 public class Locationcondition extends Basecondition {
 
-    public String location="";
 
+    private String location;
+    public Locationcondition()
+    {
+
+    }
+
+    public Locationcondition(String loc)
+    {
+        location=loc;
+    }
 
     public int getId() {
 
@@ -29,19 +38,13 @@ public class Locationcondition extends Basecondition {
         return result;
     }
 
-    public String getLocation() {
-
-        return location;
-    }
-
     public void setLocation(String location) {
-
         this.location = location;
     }
 
-    public void Locationcondition()
-    {
-
+    public String getLocation() {
+        return location;
     }
+
 
 }
