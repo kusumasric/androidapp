@@ -1,6 +1,5 @@
 package com.Alertapp;
 
-import android.content.Context;
 import java.util.Date;
 
 /**
@@ -9,26 +8,22 @@ import java.util.Date;
 
 public class CurrentState {
 
-    public float currentWeather=0;
-    public String currentLocation="";
+    public float temperature;
+    public String city;
     public Date date=new Date();
-    public Context context;
 
-    public float getCurrentweather() {
-        return currentWeather;
+    CurrentState(float temperature, String city) {
+        this.temperature = temperature;
+        this.city = city;
+    }
+    public float getTemperature() {
+        return temperature;
     }
 
-    public void setCurrentweather(float currentWeather) {
-        this.currentWeather = currentWeather;
+    public String getCity() {
+        return city;
     }
 
-    public String getCurrentlocation() {
-        return currentLocation;
-    }
-
-    public void setCurrentlocation(String currentLocation) {
-        this.currentLocation = currentLocation;
-    }
     public Date getDate()
     {
         return date;

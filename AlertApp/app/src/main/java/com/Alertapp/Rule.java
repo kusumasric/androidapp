@@ -11,9 +11,7 @@ public class Rule {
     public String ruleDesc;
     Basecondition baseconditionobj;
 
-    public Rule()
-    {
-
+    public Rule() {
     }
 
     public Basecondition getBaseconditionobj() {

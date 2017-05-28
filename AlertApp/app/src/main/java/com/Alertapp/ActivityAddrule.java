@@ -12,7 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TimePicker;
-import java.text.SimpleDateFormat;
+
 import java.util.Calendar;
 import java.util.Date;
 
@@ -24,33 +24,22 @@ import java.util.Date;
 public class ActivityAddrule extends Activity  {
 
     private EditText et_RuleName,et_RuleDesc,et_MinimumTemp,et_MaximumTemp;
+    private Spinner spinner_condition;
+    private Spinner spinner_location;
+    private DatePicker datepicker;
+    private TimePicker timepicker;
 
-    private DataStorage dbhandler=new DataStorage(this);
-    private WeatherCondition weathercondition;
-    private Locationcondition locationcondition;
-    private Timecondition timeCondition;
-    public Rule newRule;
-    private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd-HH:mm");
-    public String location;
-
-    Spinner spinner_conditionmenu;
-    Calendar selectedDateTime =Calendar.getInstance();
-    DatePicker datepicker;
-    TimePicker timepicker;
-
-    //TODO: handle adding rules differently like we discussed
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_fab_addrule);
         et_RuleName=(EditText)findViewById(R.id.et_rulename);
-        Context context = getApplicationContext();
-        spinner_conditionmenu=(Spinner)findViewById(R.id.spinner_menu);
+        spinner_condition =(Spinner)findViewById(R.id.spinner_menu);
         ArrayAdapter<String> menuadapter= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.Conditionmenu));
         final ArrayAdapter<String> locationadapter= new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,getResources().getStringArray(R.array.Locationitems));
         menuadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner_conditionmenu.setAdapter(menuadapter);
-        spinner_conditionmenu.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+        spinner_condition.setAdapter(menuadapter);
+        spinner_condition.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
 
             LayoutInflater inflater =getLayoutInflater();
             View viewTime, viewLocation, viewWeather;
@@ -76,15 +65,13 @@ public class ActivityAddrule extends Activity  {
                     viewLocation = inflater.inflate(R.layout.activity_home_fab_location_selection, linearLayout, false);
                     linearLayout.addView(viewLocation);
                     et_RuleDesc = (EditText) viewLocation.findViewById(R.id.et_ruledesc);
-                    final Spinner spinner_location = (Spinner) viewLocation.findViewById(R.id.locationspinner);
+                    spinner_location = (Spinner) viewLocation.findViewById(R.id.locationspinner);
                     locationadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                     spinner_location.setAdapter(locationadapter);
                     spinner_location.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
                         @Override
                         public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                            // Handling only few cities for now. Need to figure out a generic way to do this
-                            location = spinner_location.getSelectedItem().toString();
                         }
 
                         @Override
@@ -114,28 +101,31 @@ public class ActivityAddrule extends Activity  {
 
     public void onclickadd(View view)
     {
+        Rule newRule = null;
+        DataStorage dbhandler=new DataStorage(this);
         String ruleName=et_RuleName.getText().toString();
         String ruleDesc=et_RuleDesc.getText().toString();
 
-        if(spinner_conditionmenu.getSelectedItemPosition()==1)
+        if(spinner_condition.getSelectedItemPosition()==1)
         {
+            Calendar selectedDateTime =Calendar.getInstance();
             selectedDateTime.set(datepicker.getYear(),datepicker.getMonth(),datepicker.getDayOfMonth(),timepicker.getHour(),timepicker.getMinute());
             Date date = selectedDateTime.getTime();
-            timeCondition= new Timecondition(date);
+            TimeCondition timeCondition= new TimeCondition(date);
             newRule = new Rule(ruleName, ruleDesc, timeCondition);
         }
 
-        if(spinner_conditionmenu.getSelectedItemPosition()==2)
+        if(spinner_condition.getSelectedItemPosition()==2)
         {
-            locationcondition=new Locationcondition(location);
+            LocationCondition locationcondition=new LocationCondition( spinner_location.getSelectedItem().toString() );
             newRule=new Rule(ruleName,ruleDesc, locationcondition);
         }
 
-        if(spinner_conditionmenu.getSelectedItemPosition()==3)
+        if(spinner_condition.getSelectedItemPosition()==3)
         {
             int minTemp=Integer.parseInt(et_MinimumTemp.getText().toString());
             int maxTemp=Integer.parseInt(et_MaximumTemp.getText().toString());
-            weathercondition=new WeatherCondition(minTemp,maxTemp);
+            WeatherCondition weathercondition=new WeatherCondition(minTemp,maxTemp);
             newRule=new Rule(ruleName,ruleDesc, weathercondition);
 
         }

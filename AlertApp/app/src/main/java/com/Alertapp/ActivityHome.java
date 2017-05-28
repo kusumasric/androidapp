@@ -25,9 +25,9 @@ public class ActivityHome extends AppCompatActivity {
 
     public static final HashMap<Integer,Date> Track_rule=new HashMap<>();
 
-    public ArrayList<Rule> rulesList;
-    public RuleAdapter rulesAdapter;
-    public TextView tv_weather,tv_city;
+    private ArrayList<Rule> rulesList;
+    private RuleAdapter rulesAdapter;
+    private TextView tv_weather,tv_city;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +38,7 @@ public class ActivityHome extends AppCompatActivity {
         tv_weather=(TextView)findViewById(R.id.tvweather);
         tv_city=(TextView)findViewById(R.id.tvcity);
         initializeRulesView();
-        registerReceiver(uiUpdated, new IntentFilter("LOCATION_UPDATED"));
+        registerReceiver(updateUI, new IntentFilter("LOCATION_UPDATED"));
     }
 
     public void scheduleAlarm() {
@@ -51,18 +51,17 @@ public class ActivityHome extends AppCompatActivity {
                 1*60*1000, pIntent);
     }
 
-    private BroadcastReceiver uiUpdated= new BroadcastReceiver() {
+    private BroadcastReceiver updateUI = new BroadcastReceiver() {
 
         // TODO: name the intent variable better
         //Result-done
         @Override
         public void onReceive(Context context, Intent receiverIntent) {
 
-            float temperature=receiverIntent.getFloatExtra("temperature",1);
+            float temperature=receiverIntent.getExtras().getFloat("temperature");
             String cityName=receiverIntent.getExtras().getString("city");
             tv_weather.setText(Float.toString(temperature)+"\u2109");
             tv_city.setText(cityName);
-
         }
     };
 
@@ -70,7 +69,7 @@ public class ActivityHome extends AppCompatActivity {
     {
         final ListView ruleListView =(ListView)findViewById(R.id.listview);
         final DataStorage dataStore =new DataStorage(this);
-        rulesList = dataStore.getrules();
+        rulesList = dataStore.getAllRules();
         if(rulesList.size()>0) {
             rulesAdapter = new RuleAdapter(getApplicationContext(), rulesList);
             ruleListView.setAdapter(rulesAdapter);
@@ -105,7 +104,7 @@ public class ActivityHome extends AppCompatActivity {
     protected void onStop() {
 
         try {
-            unregisterReceiver(uiUpdated);
+            unregisterReceiver(updateUI);
         }catch (Exception e)
         {
             e.printStackTrace();

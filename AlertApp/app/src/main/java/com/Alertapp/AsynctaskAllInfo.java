@@ -12,7 +12,6 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Looper;
 import android.support.v7.app.NotificationCompat;
@@ -22,7 +21,6 @@ import net.aksingh.owmjapis.OpenWeatherMap;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -31,23 +29,18 @@ import static android.content.Context.NOTIFICATION_SERVICE;
  */
 
 
-//TODO: clean this file up
-public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps> implements LocationListener {
+public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,Void> implements LocationListener {
 
-    private LocationManager locationManager;
-    public LocationGps locationGps;
-    public Context context;
-    public float float_latitude,float_longitude;
-    public List<Address> listAddresses;
-    public Date currentDate=new Date();
-    public CurrentState presentState=new CurrentState();
-    private static int notificationNumber = 1237;
+    private LocationGps locationGps;
+    private Context context;
+    private List<Address> listAddresses;
 
     @Override
-    protected LocationGps doInBackground(Context...cont) {
-        ArrayList<Rule>  arrayallrules = new ArrayList<>();
-        String cityName="";
-        float temp1=0;
+    protected Void doInBackground(Context...cont) {
+        CurrentState currentState;
+        ArrayList< Rule > allRules;
+        String cityName = null;
+        float currentTemp = 0;
         if (Looper.myLooper() == null)
         {
             Looper.prepare();
@@ -55,8 +48,8 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
         context=cont[0];
 
         findlocation();
-        locationGps= new LocationGps(float_longitude,float_latitude);
         Geocoder geo = new Geocoder(context);
+
         try {
             if (locationGps.getLatitude()!=0 && locationGps.getLongitude()!=0) {
                 listAddresses = geo.getFromLocation(locationGps.getLatitude(),
@@ -66,12 +59,13 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
         } catch (IOException e) {
             e.printStackTrace();
         }
+
         //code to get weather conditions
         try {
             OpenWeatherMap owm = new OpenWeatherMap("c9191af0478be48aff2225833c22d6c7");
-            CurrentWeather cwd = owm.currentWeatherByCoordinates(float_latitude,float_longitude);
+            CurrentWeather cwd = owm.currentWeatherByCoordinates(locationGps.getLatitude(),locationGps.getLongitude());
             if (cwd.getMainInstance().hasMaxTemperature() && cwd.getMainInstance().hasMinTemperature()) {
-                temp1 = cwd.getMainInstance().getTemperature();
+                currentTemp = cwd.getMainInstance().getTemperature();
             }
         }
         catch(Exception ex) {
@@ -79,117 +73,76 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,LocationGps>
         }
 
         DataStorage data=new DataStorage(context);
-        presentState.setCurrentlocation(cityName);
-        presentState.setCurrentweather(temp1);
+        currentState=new CurrentState(currentTemp,cityName);
         NotificationCompat.Builder notification = new NotificationCompat.Builder(context);
         notification.setAutoCancel(true);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            int color = 0x008000;
-            notification.setColor(color);
-            notification.setSmallIcon(R.drawable.messages);
+        notification.setColor(0x008000);
+        notification.setSmallIcon(R.drawable.messages);
 
-        } else {
-            notification.setSmallIcon(R.drawable.sjsulogo);
-        }
-
-        currentDate=presentState.getDate();
-        arrayallrules=data.getrules();
+        allRules=data.getAllRules();
         Intent[] intents = new Intent[1];
         intents[0] = new Intent(context,ActivityLogin.class);
-        //Rules
-        for(int i=0;i<arrayallrules.size();i++)
+
+        //check if any of rules pass. If yes display notification
+        for(int i=0;i<allRules.size();i++)
         {
             try {
-                if(ActivityHome.Track_rule.containsKey(arrayallrules.get(i).getid())) {
-                    if (arrayallrules.get(i).baseconditionobj.isConditionSatisfied(presentState)) {
-                        Date databaseDate = ActivityHome.Track_rule.get(arrayallrules.get(i).getid());
-                        if (databaseDate.equals(currentDate)) {
-                            if (databaseDate.getTime() - currentDate.getTime() > 30) {
-                                notification.setTicker(" kusuma");
-                                notification.setWhen(System.currentTimeMillis());
-                                notification.setContentTitle(arrayallrules.get(i).getRulename());
-                                notification.setContentText(arrayallrules.get(i).getRuledesc());
-                                PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
-                                notification.setContentIntent(pintent);
-                                NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-                                nm.notify(notificationNumber++, notification.build());
-                            }
+                Rule currentRule  =allRules.get(i);
 
-                            databaseDate = currentDate;
-                            ActivityHome.Track_rule.put(arrayallrules.get(i).getid(), databaseDate);
-                        }
-                    }
-                }
-                else
-                {
-                    if (arrayallrules.get(i).baseconditionobj.isConditionSatisfied(presentState)) {
-                        notification.setTicker(" kusuma");
-                        notification.setWhen(System.currentTimeMillis());
-                        notification.setContentTitle(arrayallrules.get(i).getRulename());
-                        notification.setContentText(arrayallrules.get(i).getRuledesc());
-                        PendingIntent pintent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
-                        notification.setContentIntent(pintent);
-                        NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-                        nm.notify(notificationNumber++, notification.build());
-                        ActivityHome.Track_rule.put(arrayallrules.get(i).getid(), currentDate);
-                    }
+                // If a notification is fired already in the last 30 mins dont fire it again. Tracking this via Track_rule hashmap
+                boolean isNotificationFiredRecently = ( ActivityHome.Track_rule.containsKey(currentRule.getid()) &&
+                        currentState.getDate().getTime() - ActivityHome.Track_rule.get(currentRule.getid()).getTime() > 30*60*1000 );
+
+                if(!isNotificationFiredRecently && currentRule.baseconditionobj.isConditionSatisfied(currentState)) {
+                    notification.setWhen(System.currentTimeMillis());
+                    notification.setContentTitle(currentRule.getRulename());
+                    notification.setContentText(currentRule.getRuledesc());
+                    PendingIntent pendingIntent = PendingIntent.getActivities(context, 0, intents, PendingIntent.FLAG_UPDATE_CURRENT);
+                    notification.setContentIntent(pendingIntent);
+                    NotificationManager nm = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+                    nm.notify(currentRule.getid(), notification.build());
+                    ActivityHome.Track_rule.put(currentRule.getid(), currentState.getDate());
                 }
 
-
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
-        return locationGps;
+
+        String toastMessage="longitude"+ locationGps.getLongitude()+" "+"latitude"+ locationGps.getLatitude()+" "+"city"+ currentState.getCity() ;
+        Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent("LOCATION_UPDATED");
+        intent.putExtra("city", currentState.getCity());
+        intent.putExtra("temperature", currentState.getTemperature());
+
+        context.sendBroadcast(intent);
+        return null;
     }
 
 
     public void findlocation() {
 
         try {
-            locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
-            int permission = 0;// .checkSelfPermission(this, );
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                permission = context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION);
+            LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+            if ( context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED )
+            {
+                throw new Exception();
             }
-            if (permission != PackageManager.PERMISSION_GRANTED) {
-                return;
-            }
+
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 10, this);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 10, this);
             Location loc= locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-
-            float_longitude=(float)loc.getLongitude();
-            float_latitude=(float)loc.getLatitude();
-            locationGps=new LocationGps(float_longitude,float_latitude);
+            onLocationChanged(loc);
 
         } catch (Exception e) {
-            Toast toast = Toast.makeText(context,"please on the GPS the application stops working",Toast.LENGTH_LONG);
-            toast.show();
+            Toast.makeText(context,"please turn on the location for the application to function properly",Toast.LENGTH_LONG)
+                .show();
             e.printStackTrace();
         }
     }
 
     public void onLocationChanged(Location loc) {
-
-        float_longitude=(float)loc.getLongitude();
-        float_latitude=(float)loc.getLatitude();
-        locationGps=new LocationGps(float_longitude,float_latitude);
-        // Looper.myLooper().quit();
-    }
-
-    @Override
-    protected void onPostExecute(LocationGps locationGps) {
-
-        String str="longitude"+ locationGps.getLongitude()+" "+"latitude"+ locationGps.getLatitude()+" "+"city"+ presentState.getCurrentlocation() ;
-        Toast toast = Toast.makeText(context,str,Toast.LENGTH_SHORT);
-        toast.show();
-        Intent i = new Intent("LOCATION_UPDATED");
-        i.putExtra("city",presentState.getCurrentlocation());
-        i.putExtra("temperature",presentState.getCurrentweather());
-        context.sendBroadcast(i);
-        super.onPostExecute(locationGps);
+        locationGps=new LocationGps((float)loc.getLongitude(),(float)loc.getLatitude());
     }
 
     @Override

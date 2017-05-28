@@ -5,7 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
 import java.lang.String;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 /**
@@ -15,7 +18,7 @@ import java.util.ArrayList;
 //TODO: Rename this to DBAdaptor
 public class DataStorage extends SQLiteOpenHelper {
 
-    public  static final int dbVersion=20;
+    public  static final int dbVersion=21;
 
     public DataStorage(Context context)
     {
@@ -52,28 +55,32 @@ public class DataStorage extends SQLiteOpenHelper {
         ContentValues ruleTableValues=new ContentValues();
         ruleTableValues.put("rulename",rule.getRulename());
         ruleTableValues.put("ruledes",rule.getRuledesc());
+
         SQLiteDatabase db=getWritableDatabase();
         Long ruleId=db.insert("rules",null,ruleTableValues);
         ContentValues conditionTableValues=new ContentValues();
         conditionTableValues.put("ruleid",ruleId);
-        if(rule.baseconditionobj instanceof Locationcondition ) {
-            conditionTableValues.put("location",((Locationcondition) rule.baseconditionobj).getLocation());
+
+        if(rule.baseconditionobj instanceof LocationCondition) {
+            conditionTableValues.put("location",((LocationCondition) rule.baseconditionobj).getLocation());
             db.insert("locationcondition",null,conditionTableValues);
         }
+
         if(rule.baseconditionobj instanceof WeatherCondition) {
             conditionTableValues.put("mintemp",((WeatherCondition) rule.baseconditionobj).getMinTemp());
             conditionTableValues.put("maxtemp",((WeatherCondition) rule.baseconditionobj).getMaxTemp());
             db.insert("weathercondition",null,conditionTableValues);
         }
-        if(rule.baseconditionobj instanceof Timecondition ) {
-            conditionTableValues.put("datetime",((Timecondition) rule.baseconditionobj).getDatetime());
+
+        if(rule.baseconditionobj instanceof TimeCondition) {
+            conditionTableValues.put("datetime",((TimeCondition) rule.baseconditionobj).getDatetime());
             db.insert("datetimecondition",null,conditionTableValues);
         }
         db.close();
 
     }
 
-    public void addrow(User User)
+    public void addUser(User User)
     {
         ContentValues val=new ContentValues();
         val.put("username", User.getuname());
@@ -83,38 +90,32 @@ public class DataStorage extends SQLiteOpenHelper {
         db.close();
     }
 
-
-
-    public boolean getpass(String uname,String password)
+    public boolean isUserPasswordValid(String uname, String password)
     {
         SQLiteDatabase db=getWritableDatabase();
         Cursor c=db.rawQuery("SELECT password FROM authentication WHERE username=\""+uname+"\";",null);
-        if (c != null ) {
-            if  (c.moveToFirst()) {
-                do {
-                     String newpass=Utils.getHashOfPassword(password);
-                     String pass= c.getString(c.getColumnIndex("password"));
-                     if(newpass.equals(pass))
-                           return true;
-                }while (c.moveToNext());
-            }
+        if (c != null && c.moveToFirst() ) {
+             String hashPass=Utils.getHashOfPassword(password);
+             String hashPassFromDB = c.getString(c.getColumnIndex("password"));
+             if(hashPass.equals(hashPassFromDB))
+                   return true;
         }
         return false;
     }
 
     //To get all the rules
-    public ArrayList<Rule> getrules()
+    public ArrayList<Rule> getAllRules()
     {
         ArrayList<Rule> allarrayrules=new ArrayList<>();
-        allarrayrules.addAll(getlocationcondition());
-        allarrayrules.addAll(gettimecondition());
-        allarrayrules.addAll(getweathercondition());
+        allarrayrules.addAll(getLocationConditions());
+        allarrayrules.addAll(getTimeConditions());
+        allarrayrules.addAll(getWeatherConditions());
         return allarrayrules;
     }
 
 
     //To get all weather conditions
-    public ArrayList<Rule> getweathercondition()
+    public ArrayList<Rule> getWeatherConditions()
     {
         ArrayList<Rule> arrayweather=new ArrayList<>();
         SQLiteDatabase db=getWritableDatabase();
@@ -127,15 +128,14 @@ public class DataStorage extends SQLiteOpenHelper {
 
                 if (cursor.moveToFirst()) {
                     do {
-                         Rule obj = new Rule();
-                         WeatherCondition wcobj=new WeatherCondition();
-                         obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
-                         obj.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
-                         obj.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
-                         wcobj.setMinTemp(cursor.getInt(cursor.getColumnIndex("mintemp")));
-                         wcobj.setMaxTemp(cursor.getInt(cursor.getColumnIndex("maxtemp")));
-                         obj.setBaseconditionobj(wcobj);
-                         arrayweather.add(obj);
+                         Rule rule = new Rule();
+                         WeatherCondition weatherCondition=new WeatherCondition(cursor.getInt(cursor.getColumnIndex("mintemp")),
+                                 cursor.getInt(cursor.getColumnIndex("maxtemp")));
+                         rule.setid(cursor.getInt(cursor.getColumnIndex("ruleid")));
+                         rule.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
+                         rule.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
+                         rule.setBaseconditionobj(weatherCondition);
+                         arrayweather.add(rule);
                     } while (cursor.moveToNext());
                 }
             } finally {
@@ -150,27 +150,25 @@ public class DataStorage extends SQLiteOpenHelper {
     }
 
     //To get all locationconditions
-    public ArrayList<Rule> getlocationcondition()
+    public ArrayList<Rule> getLocationConditions()
     {
         ArrayList<Rule> arraylocation=new ArrayList<>();
         SQLiteDatabase db=getWritableDatabase();
         String selectQuery = "SELECT  locationcondition.id,locationcondition.ruleid,locationcondition.location,rules.rulename,rules.ruledes " +
                 "FROM locationcondition JOIN rules ON rules.id=locationcondition.ruleid;";
         try {
-
             Cursor cursor = db.rawQuery(selectQuery, null);
             try {
 
                 if (cursor.moveToFirst()) {
                     do {
-                        Rule obj=new Rule();
-                        Locationcondition locobj = new Locationcondition();
-                        obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
-                        obj.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
-                        obj.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
-                        locobj.setLocation(cursor.getString(cursor.getColumnIndex("location")));
-                        obj.setBaseconditionobj(locobj);
-                        arraylocation.add(obj);
+                        Rule rule=new Rule();
+                        LocationCondition locobj = new LocationCondition(cursor.getString(cursor.getColumnIndex("location")));
+                        rule.setid(cursor.getInt(cursor.getColumnIndex("ruleid")));
+                        rule.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
+                        rule.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
+                        rule.setBaseconditionobj(locobj);
+                        arraylocation.add(rule);
                     } while (cursor.moveToNext());
                 }
             } finally {
@@ -186,12 +184,13 @@ public class DataStorage extends SQLiteOpenHelper {
 
 
     //To get all datetimecondition
-    public ArrayList<Rule> gettimecondition()
+    public ArrayList<Rule> getTimeConditions()
     {
-        ArrayList<Rule> arraytime=new ArrayList<>();
+        ArrayList<Rule> timeRules=new ArrayList<>();
         SQLiteDatabase db=getWritableDatabase();
         String selectQuery = "SELECT  datetimecondition.id,datetimecondition.ruleid,datetimecondition.datetime,rules.rulename,rules.ruledes" +
                 " FROM  datetimecondition JOIN rules ON rules.id=datetimecondition.ruleid;";
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd-HH:mm");
         try {
 
             Cursor cursor = db.rawQuery(selectQuery, null);
@@ -199,25 +198,34 @@ public class DataStorage extends SQLiteOpenHelper {
 
                 if (cursor.moveToFirst()) {
                     do {
-                        Rule obj=new Rule();
-                        Timecondition timeobj = new Timecondition();
-                        obj.setid(cursor.getInt(cursor.getColumnIndex("id")));
-                        obj.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
-                        obj.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
-                        timeobj.setDatetime(cursor.getString(cursor.getColumnIndex("datetime")));
-                        obj.setBaseconditionobj(timeobj);
-                        arraytime.add(obj);
+                        Rule rule=new Rule();
+                        String dateString = cursor.getString(cursor.getColumnIndex("datetime"));
+                        TimeCondition timeCondition = new TimeCondition(dateFormat.parse(dateString));
+                        rule.setid(cursor.getInt(cursor.getColumnIndex("ruleid")));
+                        rule.setrulename(cursor.getString(cursor.getColumnIndex("rulename")));
+                        rule.setRuledesc(cursor.getString(cursor.getColumnIndex("ruledes")));
+                        rule.setBaseconditionobj(timeCondition);
+                        timeRules.add(rule);
                     } while (cursor.moveToNext());
                 }
-            } finally {
-                try { cursor.close(); } catch (Exception ignore) {}
+            }
+            catch (Exception exception)
+            {
+                Log.d("DBError", "Error while running select inside getTimeConditions " + exception.getMessage());
+            }
+            finally {
+                try { cursor.close(); } catch (Exception ignore) {
+                    Log.d("DBError", "Error while closing cursor inside getTimeConditions " + ignore.getMessage());
+                }
             }
 
         } finally {
-            try { db.close(); } catch (Exception ignore) {}
+            try { db.close(); } catch (Exception ignore) {
+                Log.d("DBError", "Error while closing database connection inside getTimeConditions " + ignore.getMessage());
+            }
         }
 
-        return arraytime;
+        return timeRules;
     }
 
 
@@ -225,29 +233,25 @@ public class DataStorage extends SQLiteOpenHelper {
     public void deleterule(Rule rule)
     {
         SQLiteDatabase db=getWritableDatabase();
-
         db.execSQL("DELETE FROM rules WHERE  rulename=\""+rule.getRulename()+"\";");
+
         Cursor c=db.rawQuery("SELECT rules.id FROM weathercondition JOIN rules WHERE rules.rulename=\""+rule.getRulename()+"\";",null);
         if (c != null ) {
             if  (c.moveToFirst()) {
                 do {
-
                     db.execSQL("DELETE FROM weathercondition WHERE ruleid=\""+c.getInt(c.getColumnIndex("id"))+"\";");
-
                 }while (c.moveToNext());
             }
         }
+
         c=db.rawQuery("SELECT rules.id FROM locationcondition JOIN rules WHERE rules.rulename=\""+rule.getRulename()+"\";",null);
         if (c != null ) {
             if  (c.moveToFirst()) {
                 do {
-
                     db.execSQL("DELETE FROM locationcondition WHERE ruleid=\""+c.getInt(c.getColumnIndex("id"))+"\";");
-
                 }while (c.moveToNext());
             }
         }
-
 
         c=db.rawQuery("SELECT rules.id FROM datetimecondition JOIN rules WHERE rules.rulename=\""+rule.getRulename()+"\";",null);
         if (c != null ) {

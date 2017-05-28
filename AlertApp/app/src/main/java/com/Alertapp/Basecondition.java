@@ -8,14 +8,7 @@ import java.text.ParseException;
 
 public abstract class Basecondition {
 
-   public abstract boolean isConditionSatisfied(CurrentState cs) throws ParseException;
-   //TODO: Add a comment
+   public abstract boolean isConditionSatisfied(CurrentState cs);
+   //Will be helpful when we have edit feature in UI
    public int conditionId;
-
-   public  Basecondition()
-   {
-
-   }
-
-
 }

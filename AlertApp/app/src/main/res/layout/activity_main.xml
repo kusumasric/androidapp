@@ -116,7 +116,7 @@
             android:layout_alignEnd="@+id/textView6"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
-            android:onClick="onclicksignup"/>
+            android:onClick="onClickSignUp"/>
 
         <Button
             android:text="Sign IN"
@@ -129,7 +129,7 @@
             android:layout_toEndOf="@+id/textView6"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
-            android:onClick="onclicksignin"/>
+            android:onClick="onClickSignIn"/>
 
         <Button
             android:text="close"
@@ -142,7 +142,7 @@
             android:layout_toEndOf="@+id/signin"
             android:layout_marginLeft="20dp"
             android:layout_marginStart="20dp"
-            android:onClick="exitApp"/>
+            android:onClick="onBtnCancelClick"/>
     </LinearLayout>
 
 </LinearLayout>

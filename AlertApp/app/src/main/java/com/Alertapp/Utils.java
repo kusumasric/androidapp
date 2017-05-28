@@ -20,7 +20,6 @@ public class Utils
         return data;
     }
 
-
     public static  String getHashOfPassword(String password) {
 
         String generatedPassword = null;

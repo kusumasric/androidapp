@@ -53,13 +53,13 @@ public class RuleAdapter extends BaseAdapter {
            imageview.setImageResource(R.drawable.weatherimage);
            tv_condition.setText(((WeatherCondition) basecondition).getMinTemp() + "-" + ((WeatherCondition) basecondition).getMaxTemp());
        }
-       if(basecondition instanceof Locationcondition ) {
+       if(basecondition instanceof LocationCondition) {
            imageview.setImageResource(R.drawable.transperantlocation);
-           tv_condition.setText(((Locationcondition) basecondition).getLocation());
+           tv_condition.setText(((LocationCondition) basecondition).getLocation());
        }
-       if(basecondition instanceof Timecondition) {
+       if(basecondition instanceof TimeCondition) {
            imageview.setImageResource(R.drawable.transperantclock);
-           tv_condition.setText(((Timecondition) basecondition).getDatetime());
+           tv_condition.setText(((TimeCondition) basecondition).getDatetime());
        }
        v.setTag(rules.get(position).getid());
        return v;

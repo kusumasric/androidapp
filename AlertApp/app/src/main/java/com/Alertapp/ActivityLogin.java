@@ -8,8 +8,7 @@ import android.widget.EditText;
 
 public class ActivityLogin extends AppCompatActivity {
 
-    public EditText et_Name,et_Pass,et_Conpass;
-    public DataStorage dbHandler = new DataStorage(this);
+    private EditText et_Name,et_Pass, et_ConPass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,19 +16,21 @@ public class ActivityLogin extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         et_Name = (EditText)findViewById(R.id.et_Name);
         et_Pass = (EditText)findViewById(R.id.et_Pass);
-        et_Conpass = (EditText)findViewById(R.id.et_CnfPass);
+        et_ConPass = (EditText)findViewById(R.id.et_CnfPass);
     }
 
-    public void onclicksignup(View view)
+    public void onClickSignUp(View view)
     {
-        Intent intent = new Intent (getApplicationContext(),ActivityHome.class);
         String password = et_Pass.getText().toString();
-        String confpass = et_Conpass.getText().toString();
-        if(password.equals(confpass))
+        String confPass = et_ConPass.getText().toString();
+
+        if(password.equals(confPass))
         {
-            String hashpass=Utils.getHashOfPassword(password);
-            User newuser = new User(et_Name.getText().toString(),hashpass.toString());
-            dbHandler.addrow(newuser);
+            String hashPass=Utils.getHashOfPassword(password);
+            User newUser = new User(et_Name.getText().toString(),hashPass.toString());
+            DataStorage dbHandler = new DataStorage(this);
+            dbHandler.addUser(newUser);
+            Intent intent = new Intent (getApplicationContext(), ActivityHome.class);
             startActivity(intent);
         }
         else
@@ -38,13 +39,12 @@ public class ActivityLogin extends AppCompatActivity {
         }
     }
 
-    public void onclicksignin(View view)
+    public void onClickSignIn(View view)
     {
         String password = et_Pass.getText().toString();
         String name = et_Name.getText().toString();
         DataStorage data =new DataStorage(this);
-        boolean res=data.getpass(name,password);
-        if(res)
+        if(data.isUserPasswordValid(name,password))
         {
             Intent intent = new Intent(getApplicationContext(), ActivityHome.class);
             startActivity(intent);
@@ -55,13 +55,13 @@ public class ActivityLogin extends AppCompatActivity {
         }
     }
 
-    public void exitApp(View view)
+    public void onBtnCancelClick(View view)
     {
         moveTaskToBack(true);
         finish();
     }
 
-    public void LoginErrorMessage()
+    private void LoginErrorMessage()
     {
         android.app.AlertDialog.Builder dlgAlert = new android.app.AlertDialog.Builder(this);
         dlgAlert.setMessage("wrong password or username");

@@ -6,20 +6,18 @@ package com.Alertapp;
 
 public class User {
     public int id;
-    public String uname;
+    public String userName;
     public String pass;
-
 
     public User(String uname, String pass)
     {
-        this.uname=uname;
+        this.userName =uname;
         this.pass=pass;
-
     }
 
     public String getuname()
     {
-        return uname;
+        return userName;
     }
     public String getpass()
     {
