@@ -12,7 +12,7 @@ public class CurrentState {
     public String city;
     public Date date=new Date();
 
-    CurrentState(float temperature, String city) {
+    public CurrentState(float temperature, String city) {
         this.temperature = temperature;
         this.city = city;
     }

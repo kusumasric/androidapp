@@ -25,7 +25,7 @@ public class LocationCondition extends Basecondition {
 
     @Override
     public boolean isConditionSatisfied(CurrentState cs) {
-        Log.d(cs.city.trim() + " " + location.trim(),cs.city.trim() + " " + location.trim());
+//        Log.d(cs.city.trim() + " " + location.trim(),cs.city.trim() + " " + location.trim());
         boolean result = cs.city.trim().equalsIgnoreCase(location.trim());
         return result;
     }

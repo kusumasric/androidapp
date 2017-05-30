@@ -28,4 +28,8 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile files('libs/owm-japis-2.5.0.3.jar')
     compile 'com.android.support:design:25.1.1'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+   // testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
 }
