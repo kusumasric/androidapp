@@ -9,7 +9,8 @@ The “Alert Application” provides user the ability to view the current temper
 1.  Signup/SignIn page and User Authentication
 2.  Users can configure Rules
 3.  Display the configured Rules
-4.  Fire Notifications
+4.  Fire Notifications 
+5.  Unit Tests
 
 <u>Enhanced Features</u>
 
