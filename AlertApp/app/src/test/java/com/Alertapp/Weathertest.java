@@ -1,10 +1,5 @@
-package com.example;
+package com.Alertapp;
 
-
-
-
-import com.Alertapp.CurrentState;
-import com.Alertapp.WeatherCondition;
 
 
 

@@ -51,7 +51,7 @@ public class RuleAdapter extends BaseAdapter {
        Basecondition basecondition=rules.get(position).getBaseconditionobj();
        if(basecondition instanceof WeatherCondition ) {
            imageview.setImageResource(R.drawable.weatherimage);
-           tv_condition.setText(((WeatherCondition) basecondition).getMinTemp() + "-" + ((WeatherCondition) basecondition).getMaxTemp());
+           tv_condition.setText(((WeatherCondition) basecondition).getMinTemp()+" \u2109" + "-" + ((WeatherCondition) basecondition).getMaxTemp()+" \u2109");
        }
        if(basecondition instanceof LocationCondition) {
            imageview.setImageResource(R.drawable.transperantlocation);

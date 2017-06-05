@@ -10,7 +10,7 @@ import android.content.Intent;
 
 public class ReceiverStartService extends BroadcastReceiver {
     public static final int REQUEST_CODE = 12345;
-    public static final String ACTION = "com.codepath.example.servicesdemo.alarm";
+
 
     @Override
     public void onReceive(Context context, Intent intent) {

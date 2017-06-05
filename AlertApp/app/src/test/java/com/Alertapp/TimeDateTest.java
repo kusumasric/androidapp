@@ -1,8 +1,4 @@
-package com.example;
-
-import com.Alertapp.CurrentState;
-import com.Alertapp.LocationCondition;
-import com.Alertapp.TimeCondition;
+package com.Alertapp;
 
 import org.junit.Test;
 
@@ -19,7 +15,6 @@ import static org.junit.Assert.assertThat;
 public class TimeDateTest {
 
     CurrentState cs=new CurrentState(50,"foster");
-
 
     @Test
     public void Timeconditionvalidation()

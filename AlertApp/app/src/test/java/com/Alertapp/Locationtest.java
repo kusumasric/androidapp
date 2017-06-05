@@ -1,7 +1,4 @@
-package com.example;
-
-import com.Alertapp.CurrentState;
-import com.Alertapp.LocationCondition;
+package com.Alertapp;
 
 import org.junit.Test;
 

@@ -14,12 +14,12 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Looper;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.NotificationCompat;
 import android.widget.Toast;
 import net.aksingh.owmjapis.CurrentWeather;
 import net.aksingh.owmjapis.OpenWeatherMap;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import static android.content.Context.NOTIFICATION_SERVICE;
@@ -91,7 +91,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,Void> implem
 
                 // If a notification is fired already in the last 30 mins dont fire it again. Tracking this via Track_rule hashmap
                 boolean isNotificationFiredRecently = ( ActivityHome.Track_rule.containsKey(currentRule.getid()) &&
-                        currentState.getDate().getTime() - ActivityHome.Track_rule.get(currentRule.getid()).getTime() > 30*60*1000 );
+                        currentState.getDate().getTime() - ActivityHome.Track_rule.get(currentRule.getid()).getTime() < 30*60*1000 );
 
                 if(!isNotificationFiredRecently && currentRule.baseconditionobj.isConditionSatisfied(currentState)) {
                     notification.setWhen(System.currentTimeMillis());
@@ -124,6 +124,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,Void> implem
 
         try {
             LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+
             if ( context.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED )
             {
                 throw new Exception();
@@ -137,8 +138,18 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,Void> implem
         } catch (Exception e) {
             Toast.makeText(context,"please turn on the location for the application to function properly",Toast.LENGTH_LONG)
                 .show();
+            buildAlertMessageNoGps();
             e.printStackTrace();
         }
+    }
+
+    private  void buildAlertMessageNoGps()
+    {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setMessage("Yout GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false);
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 
     public void onLocationChanged(Location loc) {
