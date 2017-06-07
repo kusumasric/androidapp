@@ -47,7 +47,8 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,Void> implem
         }
         context=cont[0];
 
-        findlocation();
+        locationGps = findlocation();
+        if(locationGps == null) return null;
         Geocoder geo = new Geocoder(context);
 
         try {
@@ -89,9 +90,9 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,Void> implem
             try {
                 Rule currentRule  =allRules.get(i);
 
-                // If a notification is fired already in the last 30 mins dont fire it again. Tracking this via Track_rule hashmap
+                // If a notification is fired already in the last 1 day dont fire it again. Tracking this via Track_rule hashmap
                 boolean isNotificationFiredRecently = ( ActivityHome.Track_rule.containsKey(currentRule.getid()) &&
-                        currentState.getDate().getTime() - ActivityHome.Track_rule.get(currentRule.getid()).getTime() < 30*60*1000 );
+                        currentState.getDate().getTime() - ActivityHome.Track_rule.get(currentRule.getid()).getTime() < 1*60*60*1000 );
 
                 if(!isNotificationFiredRecently && currentRule.baseconditionobj.isConditionSatisfied(currentState)) {
                     notification.setWhen(System.currentTimeMillis());
@@ -109,8 +110,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,Void> implem
             }
         }
 
-        String toastMessage="longitude"+ locationGps.getLongitude()+" "+"latitude"+ locationGps.getLatitude()+" "+"city"+ currentState.getCity() ;
-        Toast.makeText(context,toastMessage,Toast.LENGTH_SHORT).show();
+
         Intent intent = new Intent("LOCATION_UPDATED");
         intent.putExtra("city", currentState.getCity());
         intent.putExtra("temperature", currentState.getTemperature());
@@ -120,7 +120,7 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,Void> implem
     }
 
 
-    public void findlocation() {
+    public LocationGps findlocation() {
 
         try {
             LocationManager locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
@@ -133,28 +133,23 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,Void> implem
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 500, 10, this);
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 500, 10, this);
             Location loc= locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-            onLocationChanged(loc);
+            return new LocationGps((float)loc.getLongitude(),(float)loc.getLatitude());
 
         } catch (Exception e) {
-            Toast.makeText(context,"please turn on the location for the application to function properly",Toast.LENGTH_LONG)
-                .show();
-            buildAlertMessageNoGps();
+
+            locationGps=null;
             e.printStackTrace();
+
         }
+        onProgressUpdate(locationGps);
+        return null;
     }
 
-    private  void buildAlertMessageNoGps()
-    {
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setMessage("Yout GPS seems to be disabled, do you want to enable it?")
-                .setCancelable(false);
-        final AlertDialog alert = builder.create();
-        alert.show();
-    }
 
     public void onLocationChanged(Location loc) {
-        locationGps=new LocationGps((float)loc.getLongitude(),(float)loc.getLatitude());
+        //locationGps=new LocationGps((float)loc.getLongitude(),(float)loc.getLatitude());
     }
+
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -168,7 +163,18 @@ public class AsynctaskAllInfo extends AsyncTask<Context,LocationGps,Void> implem
 
     @Override
     public void onProviderDisabled(String provider) {
-
+        Toast.makeText(context,"please turn on the location for the application to function properly",Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    protected void onProgressUpdate(LocationGps...locationgps) {
+
+        super.onProgressUpdate(locationgps[0]);
+        if(locationgps[0]!=null)
+            Toast.makeText(context,"longitude"+ locationgps[0].getLongitude()+" "+"latitude"+ locationgps[0].getLatitude(),Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(context,"please turn on the location for the application to function properly",Toast.LENGTH_LONG).show();
+    }
+
 
 }
